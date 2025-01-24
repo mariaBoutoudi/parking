@@ -1,0 +1,4 @@
+name: Parking
+description: Custom module for parking payment
+type: module
+core_version_requirement: ^10

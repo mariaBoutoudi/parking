@@ -1,0 +1,18 @@
+parking_arrival_form:
+  path: '/arrivalform'
+  defaults:
+    _form: 'Drupal\parking\Form\ArrivalForm'
+    _title: 'Arrival Form'
+  requirements:
+    _permission: 'access content'
+
+parking_departure_form:
+  path: '/departureform/{book_id}'
+  defaults:
+    _form: 'Drupal\parking\Form\DepartureForm'
+    _title: 'Departure Form'
+    book_id: NULL
+  requirements:
+    _permission: 'access content'
+
+  
