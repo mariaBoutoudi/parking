@@ -6,8 +6,39 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\Entity\Node;
 use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\parking\Controller\ConstantsController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 
 class DepartureForm extends FormBase {
+
+   /**
+   * The entitytypeManager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManager
+   */
+  protected $entityTypeManager;
+
+  /**
+   * The constructor.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
+   *   The entitytypeManager.
+   */
+  public function __construct(EntityTypeManager $entityTypeManager) {
+    $this->entityTypeManager = $entityTypeManager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    // Instantiates this form class.
+    return new static(
+      // Load the service required to construct this class.
+      $container->get('entity_type.manager')
+    );
+  }
 
 
  /**
@@ -41,7 +72,7 @@ class DepartureForm extends FormBase {
   if($book_id) {
 
   // Load the node by its id from the url.
-  $entityManager = \Drupal::service('entity_type.manager');
+  $entityManager = $this->entityTypeManager;
   $properties = ['title' => $book_id];
   $nodeEntity = $entityManager->getStorage('node')->loadByProperties($properties);
 
@@ -151,8 +182,6 @@ $what = 'search';
 //  public function validateForm(array &$form, FormStateInterface $form_state) {
 
 //  }
- 
-
 
  /**
   * @param array $form
@@ -166,7 +195,7 @@ $what = 'search';
   $carId = $form_state->getValue('car_id');
 
   // Load entity type manager service.
-  $entityManager = \Drupal::service('entity_type.manager');
+  $entityManager = $this->entityTypeManager;
 
   // Load node by its title.
   $properties = ['title' => $carId];
@@ -227,10 +256,12 @@ $what = 'search';
 public function calculateCost($checkIn, $checkOut) {
 
   // The cost for the first hour.
-  $firstHour = 5; 
+  // Comes from the CONSTANTS in the controller.
+  $firstHour = ConstantsController::FIRST_HOUR;
 
-  // The cost for each hour
-  $pricePerHour = 3;
+  // The cost for each hour.
+  // Comes from the CONSTANTS in the controller.
+  $pricePerHour =  ConstantsController::PRICE_PER_HOUR;
 
   // Calculate the time the car was in parking.
   // The values are in timestamp.
@@ -248,7 +279,6 @@ return $cost;
 
 
 }
-
 
 
 }
