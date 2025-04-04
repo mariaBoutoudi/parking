@@ -60,7 +60,7 @@ class DepartureForm extends FormBase {
     // Set a value for the hidden form field 'what'.
     $what = 'checkout';
 
-    // Set the checkout time cause is NULL in the arrival form.
+    // Set a value to the checkout time cause is NULL in the arrival form.
     $currentTime = time();
 
     // If we already have a car id in the url.
