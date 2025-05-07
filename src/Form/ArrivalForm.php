@@ -50,10 +50,11 @@ class ArrivalForm extends FormBase {
     // Set a value for the of car id.
     $id = $form_state->getValue('car_plate');
     
-    // Remove - or space from the car id string.
+    // Remove "-" or space from the car id string.
     $str_car = str_replace([" ", "-"], "", $id);
 
     // The string should have 7 characters.
+
     // In case there are 7 characters.
     if(strlen($str_car) == "7"){
 
@@ -72,6 +73,7 @@ class ArrivalForm extends FormBase {
         if($key < 3){
       
           // In case the first 3 are not alphabetic.
+          // TO DO -----> Regex for latin characters only.
           if(!ctype_alpha($item)){
           // if(!preg_match('/^[Α-Ωα-ω]+$/u',$item)){
 
@@ -96,7 +98,7 @@ class ArrivalForm extends FormBase {
   else{
 
     // Error message.
-    $form_state->setErrorByName('car_plate', $this->t('The car plate id is not valid because @val is more than 7 characters.',['@val' => strlen($str_car)]));
+    $form_state->setErrorByName('car_plate', $this->t('The car plate id is not valid because @val is more or less than 7 characters.',['@val' => strlen($str_car)]));
   }
 
     }
