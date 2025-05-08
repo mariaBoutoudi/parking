@@ -96,6 +96,12 @@ class DepartureForm extends FormBase {
         // The message with the total cost.
         $costMessage = 'Total payment: ' . $cost . ' euros';
 
+        $form['message'] = [
+          '#type' => 'markup',
+          '#markup' => '<div id="information">The outgoing car with ' . $book_id . ' ID has the following entry:</div>',
+
+        ];
+
         // This field is used for the node elements to be shown.
         $form['info'] = [
           '#type' => 'markup',
@@ -103,6 +109,11 @@ class DepartureForm extends FormBase {
 
         ];
 
+        $form['pay_message'] = [
+          '#type' => 'markup',
+          '#markup' => '<div id="information">Please check Payment only if the outgoing car has paid ' . $cost . ' euros.</div>',
+
+        ];
         // Check the payment.
         $form['payment'] = [
           '#type' => 'checkbox',
@@ -142,6 +153,11 @@ class DepartureForm extends FormBase {
     // If book id (in url) does not exist.
     else {
 
+      $form['info'] = [
+        '#type' => 'markup',
+        '#markup' => '<div id="information">Please enter the ID of the outgoing car.</div>',
+
+      ];
       // The unique id of the car.
       $form['car_id'] = [
         '#type' => 'number',
@@ -203,6 +219,9 @@ class DepartureForm extends FormBase {
       $update_node->set('field_cost', $cost);
       $update_node->save();
 
+      // Show a message.
+      \Drupal::messenger()->addMessage($this->t("Successful registration."));
+
     }
 
     else {
@@ -219,7 +238,7 @@ class DepartureForm extends FormBase {
       else {
 
         // Show a message.
-        \Drupal::messenger()->addMessage($this->t("This car id does not exist."));
+        \Drupal::messenger()->addError($this->t("This car id does not exist."));
 
         // Redirect to search form.
         $form_state->setRedirect('parking_departure_form');
