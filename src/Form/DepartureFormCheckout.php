@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * The departure form.
  */
-class DepartureForm extends FormBase {
+class DepartureFormCheckout extends FormBase {
 
   /**
    * The entitytypeManager.
@@ -55,65 +55,65 @@ class DepartureForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $book_id = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state) {
 
     // Set a value for the hidden form field 'what'.
-    $what = 'checkout';
+    // $what = 'checkout';
 
     // Set a value to the checkout time cause is NULL in the arrival form.
-    $currentTime = time();
+    // $currentTime = time();
 
     // If we already have a car id in the url.
-    if ($book_id) {
+    // if ($book_id) {
 
       // Load the node by its id from the url.
-      $entityManager = $this->entityTypeManager;
-      $properties = ['title' => $book_id];
-      $nodeEntity = $entityManager->getStorage('node')->loadByProperties($properties);
+      // $entityManager = $this->entityTypeManager;
+      // $properties = ['title' => $book_id];
+      // $nodeEntity = $entityManager->getStorage('node')->loadByProperties($properties);
 
       // Get from the array [nodeid => {nodeObject}] the nodeObject.
-      $node = reset($nodeEntity);
+      // $node = reset($nodeEntity);
 
       // In case the node exists.
-      if ($nodeEntity) {
+      // if ($nodeEntity) {
 
-        // Have the car id form field as hidden to be used.
-        $form['car_id'] = [
-          '#type' => 'hidden',
-          '#value' => $node->id(),
-        ];
+      //   // Have the car id form field as hidden to be used.
+        // $form['car_id'] = [
+        //   '#type' => 'hidden',
+        //   '#value' => $node->id(),
+        // ];
 
         // Get the plate number from the node to be shown.
         // the message with the car plate.
-        $plateNum = 'Plate number: ' . $node->get('field_car_plate')->value;
+        // $plateNum = 'Plate number: ' . $node->get('field_car_plate')->value;
 
         // Get the cost from the node to be shown.
         // Call the function that gives the total cost.
         // With the datetime in and datetime out.
         // Which is declared at the begining of buildForm.
-        $cost = $this->calculateCost($node->get('field_datetime_in')->value, $currentTime);
+        // $cost = $this->calculateCost($node->get('field_datetime_in')->value, $currentTime);
 
         // The message with the total cost.
-        $costMessage = 'Total payment: ' . $cost . ' euros';
+        // $costMessage = 'Total payment: ' . $cost . ' euros';
 
-        $form['message'] = [
-          '#type' => 'markup',
-          '#markup' => '<div id="information">The outgoing car with ' . $book_id . ' ID has the following entry:</div>',
+        // $form['message'] = [
+        //   '#type' => 'markup',
+        //   '#markup' => '<div id="information">The outgoing car with ' . $book_id . ' ID has the following entry:</div>',
 
-        ];
+        // ];
 
         // This field is used for the node elements to be shown.
-        $form['info'] = [
-          '#type' => 'markup',
-          '#markup' => '<div id="information"> ' . $plateNum . '<br>' . $costMessage . '</div>',
+        // $form['info'] = [
+        //   '#type' => 'markup',
+        //   '#markup' => '<div id="information"> ' . $plateNum . '<br>' . $costMessage . '</div>',
 
-        ];
+        // ];
 
-        $form['pay_message'] = [
-          '#type' => 'markup',
-          '#markup' => '<div id="information">Please check Payment only if the outgoing car has paid ' . $cost . ' euros.</div>',
+        // $form['pay_message'] = [
+        //   '#type' => 'markup',
+        //   '#markup' => '<div id="information">Please check Payment only if the outgoing car has paid ' . $cost . ' euros.</div>',
 
-        ];
+        // ];
         // Check the payment.
         $form['payment'] = [
           '#type' => 'checkbox',
@@ -128,62 +128,62 @@ class DepartureForm extends FormBase {
           '#button_type' => 'primary',
         ];
 
-      }
+      
 
       // If there is no node entity.
-      else {
+      // else {
 
-        // The unique id of the car.
-        $form['car_id'] = [
-          '#type' => 'number',
-          '#title' => $this->t('Car ID'),
-          '#required' => TRUE,
-        ];
+      //   // The unique id of the car.
+      //   $form['car_id'] = [
+      //     '#type' => 'number',
+      //     '#title' => $this->t('Car ID'),
+      //     '#required' => TRUE,
+      //   ];
 
-        // Submit button.
-        $form['actions']['submit'] = [
-          '#type' => 'submit',
-          '#value' => $this->t('Search'),
-          '#button_type' => 'primary',
-        ];
+      //   // Submit button.
+      //   $form['actions']['submit'] = [
+      //     '#type' => 'submit',
+      //     '#value' => $this->t('Search'),
+      //     '#button_type' => 'primary',
+      //   ];
 
-      }
-    }
+      // }
+    
 
     // If book id (in url) does not exist.
-    else {
+    // else {
 
-      $form['info'] = [
-        '#type' => 'markup',
-        '#markup' => '<div id="information">Please enter the ID of the outgoing car.</div>',
+    //   $form['info'] = [
+    //     '#type' => 'markup',
+    //     '#markup' => '<div id="information">Please enter the ID of the outgoing car.</div>',
 
-      ];
-      // The unique id of the car.
-      $form['car_id'] = [
-        '#type' => 'number',
-        '#title' => $this->t('Car ID'),
-        '#required' => TRUE,
-      ];
+    //   ];
+    //   // The unique id of the car.
+    //   $form['car_id'] = [
+    //     '#type' => 'number',
+    //     '#title' => $this->t('Car ID'),
+    //     '#required' => TRUE,
+    //   ];
 
-      // Submit button.
-      $form['actions']['submit'] = [
-        '#type' => 'submit',
-        '#value' => $this->t('Search'),
-        '#button_type' => 'primary',
-      ];
-      $what = 'search';
+    //   // Submit button.
+    //   $form['actions']['submit'] = [
+    //     '#type' => 'submit',
+    //     '#value' => $this->t('Search'),
+    //     '#button_type' => 'primary',
+    //   ];
+    //   $what = 'search';
 
-    }
+  
 
     // A hidden field to be used.
     // $what has two values.
     // Search value if the user is in search form (button).
     // Checkout value if the user is in checkout form (button).
     // We set the value to be used in submitForm function.
-    $form['what'] = [
-      '#type' => 'hidden',
-      '#default_value' => $what,
-    ];
+    // $form['what'] = [
+    //   '#type' => 'hidden',
+    //   '#default_value' => $what,
+    // ];
 
     return $form;
   }
@@ -204,7 +204,7 @@ class DepartureForm extends FormBase {
     $nodeEntity = $entityManager->getStorage('node')->loadByProperties($properties);
 
     // If the user is in form with checkout button.
-    if ($form_state->getValue('what') == 'checkout') {
+    // if ($form_state->getValue('what') == 'checkout') {
 
       $node = $entityManager->getStorage('node')->load($carId);
       $in = $node->get('field_datetime_in')->value;
@@ -222,19 +222,19 @@ class DepartureForm extends FormBase {
       // Show a message.
       \Drupal::messenger()->addMessage($this->t("Successful registration."));
 
-    }
+    // }
 
-    else {
+    // else {
 
-      // If we already have a node saved.
+    //   // If we already have a node saved.
       if ($nodeEntity) {
 
-        // Redirect to routing 'parking_departure_form'.
-        // Path: '/departureform/book_id'.
+    //     // Redirect to routing 'parking_departure_form'.
+    //     // Path: '/departureform/book_id'.
         $form_state->setRedirect('parking_departure_form', ['book_id' => $form_state->getValue('car_id')]);
       }
 
-      // If the Car id does not exist.
+    //   // If the Car id does not exist.
       else {
 
         // Show a message.
@@ -243,8 +243,9 @@ class DepartureForm extends FormBase {
         // Redirect to search form.
         $form_state->setRedirect('parking_departure_form');
       }
+    
     }
-  }
+  
 
   /**
    * Calculate the cost that car must pay.

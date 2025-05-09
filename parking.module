@@ -14,6 +14,8 @@
  * table 'drush cc theme-registry' and 'drush cc router'.
  */
 function parking_theme($existing, $type, $theme, $path) {
+
+    $path = \Drupal::service('extension.list.module')->getPath('parking');
     
   return [
     'departure_template' => [
@@ -23,12 +25,15 @@ function parking_theme($existing, $type, $theme, $path) {
 
         // Optionally define path to Twig template files.
         // The directory path of the parking module, so that it doesn't need to be looked up.
-        'path' => \Drupal::service('extension.list.module')->getPath('parking') . '/templates',
+        'path' => $path . '/templates',
 
         // Optionally define variables that will be passed to the Twig
         // template and set default values for them.
         'variables' => [
+            'bookid' => '',
             'plateNum' => '',
+            'cost' => '',
+            'departureform' => '',
 
         ],
 

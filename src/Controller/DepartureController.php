@@ -5,8 +5,6 @@ namespace Drupal\parking\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\parking\Form\DepartureForm;
-
 
 /**
  * An example controller.
@@ -41,24 +39,89 @@ class DepartureController extends ControllerBase {
     );
   }  
 
-public function content() {
+public function content($book_id = NULL) {
 
-  // TO DO----------->condition on the 2 different departure forms.
+  $currentTime = time();
+  
+
+  //  If we already have a car id in the url.
+   if ($book_id) {
+
+    // Load the node by its id from the url.
+    $entityManager = $this->entityTypeManager;
+    $properties = ['title' => $book_id];
+    $nodeEntity = $entityManager->getStorage('node')->loadByProperties($properties);
+
+    // // Get from the array [nodeid => {nodeObject}] the nodeObject.
+    $node = reset($nodeEntity);
+
+    // In case the node exists.
+    if ($nodeEntity) {
+
   // Get the departure form via controller.
-  $departureForm['departure_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\DepartureForm');
-  return $departureForm;
+  $departureForm['departure_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\DepartureFormCheckout');
+    }
+
+    else {
+        // Get the departure form via controller.
+  $departureForm['departure_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\DepartureFormSearch');
+    }
+   }
+
+  else {
+        // Get the departure form via controller.
+        $departureForm['departure_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\DepartureFormSearch');
+    }
+  
 
     return [
         // Your theme hook name.
         '#theme' => 'departure_template',
-        // Your variables.
-        // '#bookid' => ,
-        '#plateNum' => 'maria',
-        // $node->get('field_car_plate')->value,
-        // '#cost' => $this->calculateCost($node->get('field_datetime_in')->value, $currentTime),
-
-
+        // // Your variables.
+        '#bookid' => $book_id ,
+        '#plateNum' => $book_id ? $node->get('field_car_plate')->value : '',
+        '#cost' => $book_id ? $this->calculateCost($node->get('field_datetime_in')->value, $currentTime) : '',
+        '#departureform' => $departureForm,
     ];
-    }
+  
+}
+  
+
+     /**
+   * Calculate the cost that car must pay.
+   *
+   * @param string $checkIn
+   *   The arrival time.
+   * @param string $checkOut
+   *   The departure time.
+   *
+   * @return string
+   *   The final cost.
+   */
+  public function calculateCost($checkIn, $checkOut) {
+
+    // The cost for the first hour.
+    // Comes from the CONSTANTS in the controller.
+    $firstHour = ConstantsController::FIRST_HOUR;
+
+    // The cost for each hour.
+    // Comes from the CONSTANTS in the controller.
+    $pricePerHour = ConstantsController::PRICE_PER_HOUR;
+
+    // Calculate the time the car was in parking.
+    // The values are in timestamp.
+    $seconds = $checkOut - $checkIn;
+
+    // Convert the timestamp seconds in hours.
+    $hours = $seconds / 3600;
+
+    // Round up the hours.
+    // Extract the first hour cause the cost is different.
+    // Multiply the left hours with the price per hour.
+    // Add to final cost (in euros) the first hour price.
+    $cost = ((ceil($hours) - 1) * $pricePerHour) + $firstHour;
+    return $cost;
+
+  }
 
 }
