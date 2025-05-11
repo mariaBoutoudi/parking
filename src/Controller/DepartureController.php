@@ -42,6 +42,9 @@ class DepartureController extends ControllerBase {
 public function content($book_id = NULL) {
 
   $currentTime = time();
+  $node = '';
+  $plateNum = '';
+  $cost = '';
   
 
   //  If we already have a car id in the url.
@@ -55,19 +58,25 @@ public function content($book_id = NULL) {
     // // Get from the array [nodeid => {nodeObject}] the nodeObject.
     $node = reset($nodeEntity);
 
+    $plateNum = $node->get('field_car_plate')->value;
+    $cost = $this->calculateCost($node->get('field_datetime_in')->value, $currentTime);
+
     // In case the node exists.
     if ($nodeEntity) {
 
   // Get the departure form via controller.
-  $departureForm['departure_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\DepartureFormCheckout');
+  // Put $book_id to be used in checkout form.
+  $departureForm['departure_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\DepartureFormCheckout', $book_id);
     }
 
+    // If ther is no node.
     else {
         // Get the departure form via controller.
   $departureForm['departure_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\DepartureFormSearch');
     }
    }
 
+  //  In case $bookid is NULL.
   else {
         // Get the departure form via controller.
         $departureForm['departure_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\DepartureFormSearch');
@@ -79,8 +88,8 @@ public function content($book_id = NULL) {
         '#theme' => 'departure_template',
         // // Your variables.
         '#bookid' => $book_id ,
-        '#plateNum' => $book_id ? $node->get('field_car_plate')->value : '',
-        '#cost' => $book_id ? $this->calculateCost($node->get('field_datetime_in')->value, $currentTime) : '',
+        '#plateNum' => $plateNum,
+        '#cost' => $cost,
         '#departureform' => $departureForm,
     ];
   

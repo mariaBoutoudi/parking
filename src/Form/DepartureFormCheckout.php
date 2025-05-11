@@ -8,6 +8,7 @@ use Drupal\node\Entity\Node;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\parking\Controller\ConstantsController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Url;
 
 /**
  * The departure form.
@@ -55,135 +56,25 @@ class DepartureFormCheckout extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state, $book_id = NULL) {
 
-    // Set a value for the hidden form field 'what'.
-    // $what = 'checkout';
+    // Check the payment.
+    $form['payment'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Payment'),
+    // '#default_value' => 1,
+    ];
 
-    // Set a value to the checkout time cause is NULL in the arrival form.
-    // $currentTime = time();
+    // Checkout button.
+    $form['actions']['checkout'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Checkout'),
+      '#button_type' => 'primary',
+    ];
 
-    // If we already have a car id in the url.
-    // if ($book_id) {
-
-      // Load the node by its id from the url.
-      // $entityManager = $this->entityTypeManager;
-      // $properties = ['title' => $book_id];
-      // $nodeEntity = $entityManager->getStorage('node')->loadByProperties($properties);
-
-      // Get from the array [nodeid => {nodeObject}] the nodeObject.
-      // $node = reset($nodeEntity);
-
-      // In case the node exists.
-      // if ($nodeEntity) {
-
-      //   // Have the car id form field as hidden to be used.
-        // $form['car_id'] = [
-        //   '#type' => 'hidden',
-        //   '#value' => $node->id(),
-        // ];
-
-        // Get the plate number from the node to be shown.
-        // the message with the car plate.
-        // $plateNum = 'Plate number: ' . $node->get('field_car_plate')->value;
-
-        // Get the cost from the node to be shown.
-        // Call the function that gives the total cost.
-        // With the datetime in and datetime out.
-        // Which is declared at the begining of buildForm.
-        // $cost = $this->calculateCost($node->get('field_datetime_in')->value, $currentTime);
-
-        // The message with the total cost.
-        // $costMessage = 'Total payment: ' . $cost . ' euros';
-
-        // $form['message'] = [
-        //   '#type' => 'markup',
-        //   '#markup' => '<div id="information">The outgoing car with ' . $book_id . ' ID has the following entry:</div>',
-
-        // ];
-
-        // This field is used for the node elements to be shown.
-        // $form['info'] = [
-        //   '#type' => 'markup',
-        //   '#markup' => '<div id="information"> ' . $plateNum . '<br>' . $costMessage . '</div>',
-
-        // ];
-
-        // $form['pay_message'] = [
-        //   '#type' => 'markup',
-        //   '#markup' => '<div id="information">Please check Payment only if the outgoing car has paid ' . $cost . ' euros.</div>',
-
-        // ];
-        // Check the payment.
-        $form['payment'] = [
-          '#type' => 'checkbox',
-          '#title' => $this->t('Payment'),
-        // '#default_value' => 1,
-        ];
-
-        // Checkout button.
-        $form['actions']['checkout'] = [
-          '#type' => 'submit',
-          '#value' => $this->t('Checkout'),
-          '#button_type' => 'primary',
-        ];
-
-      
-
-      // If there is no node entity.
-      // else {
-
-      //   // The unique id of the car.
-      //   $form['car_id'] = [
-      //     '#type' => 'number',
-      //     '#title' => $this->t('Car ID'),
-      //     '#required' => TRUE,
-      //   ];
-
-      //   // Submit button.
-      //   $form['actions']['submit'] = [
-      //     '#type' => 'submit',
-      //     '#value' => $this->t('Search'),
-      //     '#button_type' => 'primary',
-      //   ];
-
-      // }
-    
-
-    // If book id (in url) does not exist.
-    // else {
-
-    //   $form['info'] = [
-    //     '#type' => 'markup',
-    //     '#markup' => '<div id="information">Please enter the ID of the outgoing car.</div>',
-
-    //   ];
-    //   // The unique id of the car.
-    //   $form['car_id'] = [
-    //     '#type' => 'number',
-    //     '#title' => $this->t('Car ID'),
-    //     '#required' => TRUE,
-    //   ];
-
-    //   // Submit button.
-    //   $form['actions']['submit'] = [
-    //     '#type' => 'submit',
-    //     '#value' => $this->t('Search'),
-    //     '#button_type' => 'primary',
-    //   ];
-    //   $what = 'search';
-
-  
-
-    // A hidden field to be used.
-    // $what has two values.
-    // Search value if the user is in search form (button).
-    // Checkout value if the user is in checkout form (button).
-    // We set the value to be used in submitForm function.
-    // $form['what'] = [
-    //   '#type' => 'hidden',
-    //   '#default_value' => $what,
-    // ];
+    // Insert the value of $book_id in form_state.
+    // We get the value of $book_id from the controller.
+    $form_state->set('bookId', $book_id);
 
     return $form;
   }
@@ -193,34 +84,38 @@ class DepartureFormCheckout extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
-    // Get the car id from its form fiels.
-    $carId = $form_state->getValue('car_id');
+
+    // Get the bookid.
+    // We set the value in build form.
+    $id = $form_state->get('bookId');
 
     // Load entity type manager service.
     $entityManager = $this->entityTypeManager;
 
     // Load node by its title.
-    $properties = ['title' => $carId];
+    $properties = ['title' => $id];
     $nodeEntity = $entityManager->getStorage('node')->loadByProperties($properties);
+    $nodeEntity_2 = $entityManager->getStorage('node')->load('96');
+    $nodeEntity_3 = Node::load('96');
+    
+    // $node = reset($nodeEntity);
 
-    // If the user is in form with checkout button.
-    // if ($form_state->getValue('what') == 'checkout') {
+    $in = $node->get('field_datetime_in')->value;
+    $out = time();
+    $cost = $this->calculateCost($in, $out);
 
-      $node = $entityManager->getStorage('node')->load($carId);
-      $in = $node->get('field_datetime_in')->value;
-      $out = time();
-      $cost = $this->calculateCost($in, $out);
+ 
 
-      // Update the specific node with the values of the form fields.
-      $update_node = Node::load($carId);
-      $timestamp = time();
-      $update_node->set('field_datetime_out', $timestamp);
-      $update_node->set('field_payment', $form_state->getValue('payment'));
-      $update_node->set('field_cost', $cost);
-      $update_node->save();
+    // Update the specific node with the values of the form fields.
+    $update_node = Node::load($id);
+    $timestamp = time();
+    $update_node->set('field_datetime_out', $timestamp);
+    $update_node->set('field_payment', $form_state->getValue('payment'));
+    $update_node->set('field_cost', $cost);
+    $update_node->save();
 
-      // Show a message.
-      \Drupal::messenger()->addMessage($this->t("Successful registration."));
+    // Show a message.
+    \Drupal::messenger()->addMessage($this->t("Successful registration."));
 
     // }
 
