@@ -8,7 +8,6 @@ use Drupal\node\Entity\Node;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\parking\Controller\ConstantsController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Url;
 
 /**
  * The departure form.
@@ -73,7 +72,8 @@ class DepartureFormCheckout extends FormBase {
     ];
 
     // Insert the value of $book_id in form_state.
-    // We get the value of $book_id from the controller.
+    // We get the value of $book_id from the controller 
+    // and set it as a parameter in buildForm.
     $form_state->set('bookId', $book_id);
 
     return $form;
@@ -92,22 +92,30 @@ class DepartureFormCheckout extends FormBase {
     // Load entity type manager service.
     $entityManager = $this->entityTypeManager;
 
-    // Load node by its title.
+    // Load node by its title as an array.
     $properties = ['title' => $id];
     $nodeEntity = $entityManager->getStorage('node')->loadByProperties($properties);
-    $nodeEntity_2 = $entityManager->getStorage('node')->load('96');
-    $nodeEntity_3 = Node::load('96');
-    
-    // $node = reset($nodeEntity);
 
+    // Get nodes with title $id as an array [key=>value].
+    // With reset() get the value of the first node of the array.
+    $node = reset($nodeEntity);
+
+    // Get the id of the node array.
+    $nid = $node->id();
+
+    // Get the time the car came in parking.  
     $in = $node->get('field_datetime_in')->value;
+
+    // Set the departure time of the car.
     $out = time();
+
+    // Call the function which gives the total cost.
     $cost = $this->calculateCost($in, $out);
 
  
 
     // Update the specific node with the values of the form fields.
-    $update_node = Node::load($id);
+    $update_node = Node::load($nid);
     $timestamp = time();
     $update_node->set('field_datetime_out', $timestamp);
     $update_node->set('field_payment', $form_state->getValue('payment'));
