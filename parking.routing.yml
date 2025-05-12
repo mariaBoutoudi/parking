@@ -1,7 +1,7 @@
 parking_arrival_form:
   path: "/arrivalform"
   defaults:
-    _form: 'Drupal\parking\Form\ArrivalForm'
+    _controller: 'Drupal\parking\Controller\ArrivalController::content'
     _title: "Arrival Form"
   requirements:
     _permission: "access content"

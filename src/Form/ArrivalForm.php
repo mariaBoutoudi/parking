@@ -46,7 +46,6 @@ class ArrivalForm extends FormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
 
-  
     // Set a value for the of car id.
     $id = $form_state->getValue('car_plate');
     
@@ -58,50 +57,50 @@ class ArrivalForm extends FormBase {
     // In case there are 7 characters.
     if(strlen($str_car) == "7"){
 
-      // Convert the car id into an array.
-      $array_car = str_split($str_car);
+    // Convert the car id into an array.
+    $array_car = str_split($str_car);
 
+    // Loop through the car id array of 7 characters.
+    // We will use both the key and value of the array.
+    foreach($array_car as $key => $item){
+
+    // The first 3 must be alphabetic.
+    // The last 4 must be numbers.
+    // Check the first three items of the array by their key.
+    if($key < 3){
+  
+    // In case the first 3 are not latin characters.
+    $pattern = '/^[a-zA-Z]+$/';
+    if(!preg_match($pattern, $item)){
+   
+    // Error message.
+    $form_state->setErrorByName('car_plate', 
+    $this->t('The car plate id is not valid because @val is not a valid character.', ['@val' => $item]));
+    }
+  }
+    // Check the last 4 items of the array by their key.
+    else{
     
-      // Loop through the car id array of 7 characters.
-      // We will use both the key and value of the array.
-      foreach($array_car as $key => $item){
+    // In case the last 4 characters are not numbers.
+    if(!is_numeric($item)){
 
-        
-        // The first 3 must be alphabetic.
-        // The last 4 must be numbers.
-        // Check the first three items of the array by their key.
-        if($key < 3){
-      
-          // In case the first 3 are not alphabetic.
-          // TO DO -----> Regex for latin characters only.
-          if(!ctype_alpha($item)){
-          // if(!preg_match('/^[Α-Ωα-ω]+$/u',$item)){
-
-            // Error message.
-            $form_state->setErrorByName('car_plate', $this->t('The car plate id is not valid because @val is not a valid character.', ['@val' => $item]));
-       }
-      }
-      // Check the last 4 items of the array by their key.
-      else{
-        
-        // In case the last 4 characters are not numbers.
-        if(!is_numeric($item)){
-
-          // Error message.
-          $form_state->setErrorByName('car_plate', $this->t('The car plate id is not valid because @val is not a number.',['@val' => $item]));
-        }
-      }
+    // Error message.
+    $form_state->setErrorByName('car_plate',
+    $this->t('The car plate id is not valid because @val is not a number.',['@val' => $item]));
+    }
+  }
     }
   }
 
   // In case there are more or less (than 7) characters in the car id string.
   else{
 
-    // Error message.
-    $form_state->setErrorByName('car_plate', $this->t('The car plate id is not valid because @val is more or less than 7 characters.',['@val' => strlen($str_car)]));
+  // Error message.
+  $form_state->setErrorByName('car_plate', 
+  $this->t('The car plate must have 7 characters.'));
   }
 
-    }
+  }
 
   /**
    * {@inheritdoc}
@@ -121,8 +120,11 @@ class ArrivalForm extends FormBase {
     $new_node->save();
 
   //  A message shown after the submission.
-    \Drupal::messenger()->addMessage($this->t("The car number has been saved."));
+    \Drupal::messenger()->addMessage($this->t('The car plate has been saved with the id ' .  $timestamp));
 
+    // TO DO ----> create a dashboard page.
+    // TO DO ----> redirect to dashboard page after car plate has been saved.
+    //  $form_state->setRedirect('dashboard');
 
   }
 

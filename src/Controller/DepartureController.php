@@ -69,7 +69,7 @@ public function content($book_id = NULL) {
   $departureForm['departure_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\DepartureFormCheckout', $book_id);
     }
 
-    // If ther is no node.
+    // If there is no node.
     else {
         // Get the departure form via controller.
   $departureForm['departure_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\DepartureFormSearch');
