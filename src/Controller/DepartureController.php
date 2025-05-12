@@ -5,6 +5,7 @@ namespace Drupal\parking\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\parking\Services\CalculateCostService;
 
 /**
  * An example controller.
@@ -18,14 +19,24 @@ class DepartureController extends ControllerBase {
    */
   protected $entityTypeManager;
 
+   /**
+   * The calculator.
+   *
+   * @var \Drupal\parking\Services\CalculateCostService
+   */
+  protected $calculator;
+
   /**
    * The constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
    *   The entitytypeManager.
+   * @param \Drupal\parking\Services\CalculateCostService $calculator
+   *   The calculator
    */
-  public function __construct(EntityTypeManager $entityTypeManager) {
+  public function __construct(EntityTypeManager $entityTypeManager, CalculateCostService $calculator) {
     $this->entityTypeManager = $entityTypeManager;
+    $this->calculator = $calculator;
   }
 
   /**
@@ -36,6 +47,7 @@ class DepartureController extends ControllerBase {
     return new self(
       // Load the service required to construct this class.
       $container->get('entity_type.manager'),
+      $container->get('parking.calculation')
     );
   }  
 
@@ -59,7 +71,7 @@ public function content($book_id = NULL) {
     $node = reset($nodeEntity);
 
     $plateNum = $node->get('field_car_plate')->value;
-    $cost = $this->calculateCost($node->get('field_datetime_in')->value, $currentTime);
+    $cost = $this->calculator->calculateCost($node->get('field_datetime_in')->value, $currentTime);
 
     // In case the node exists.
     if ($nodeEntity) {
@@ -95,42 +107,4 @@ public function content($book_id = NULL) {
   
 }
   
-
-     /**
-   * Calculate the cost that car must pay.
-   *
-   * @param string $checkIn
-   *   The arrival time.
-   * @param string $checkOut
-   *   The departure time.
-   *
-   * @return string
-   *   The final cost.
-   */
-  public function calculateCost($checkIn, $checkOut) {
-
-    // The cost for the first hour.
-    // Comes from the CONSTANTS in the controller.
-    $firstHour = ConstantsController::FIRST_HOUR;
-
-    // The cost for each hour.
-    // Comes from the CONSTANTS in the controller.
-    $pricePerHour = ConstantsController::PRICE_PER_HOUR;
-
-    // Calculate the time the car was in parking.
-    // The values are in timestamp.
-    $seconds = $checkOut - $checkIn;
-
-    // Convert the timestamp seconds in hours.
-    $hours = $seconds / 3600;
-
-    // Round up the hours.
-    // Extract the first hour cause the cost is different.
-    // Multiply the left hours with the price per hour.
-    // Add to final cost (in euros) the first hour price.
-    $cost = ((ceil($hours) - 1) * $pricePerHour) + $firstHour;
-    return $cost;
-
-  }
-
 }

@@ -1,11 +1,13 @@
-{% if cost is not empty %} 
-
-<h3>{{ cost }}</h3>
-{% endif %} 
-
 {% if plateNum is not empty %}
-<h3>{{ plateNum }}</h3>
+<p>The car plate is {{ plateNum }}.</p>
 {% endif %}
 
-<h3>{{ bookid }}</h3> 
+<p>The car id is {{ bookid }}.</p> 
+
+{% if cost is not empty %} 
+
+<h5>The total cost is {{ cost }} euros.<br>
+Please check 'Payment' when the receipt has been issued.</h5>
+{% endif %} 
+
 <div> {{ departureform }}</div>

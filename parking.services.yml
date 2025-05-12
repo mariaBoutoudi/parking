@@ -1,0 +1,3 @@
+services:
+  parking.calculation:
+    class: Drupal\parking\Services\CalculateCostService
