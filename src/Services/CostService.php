@@ -1,13 +1,13 @@
- <?php
- 
- namespace Drupal\parking\Services;
+<?php
 
- use Drupal\parking\ConstantsController;
+namespace Drupal\parking\Services;
+
+use Drupal\parking\ConstantsController;
 
 /**
- * The CalculateCostService calcutator class.
+ * The CostService calcutator class.
  */
- class CalculateCostService {
+ class CostService {
  
  /**
    * Calculate the cost that car must pay.

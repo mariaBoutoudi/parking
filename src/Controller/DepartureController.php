@@ -5,7 +5,7 @@ namespace Drupal\parking\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\parking\Services\CalculateCostService;
+use Drupal\parking\Services\CostService;
 
 /**
  * An example controller.
@@ -22,7 +22,7 @@ class DepartureController extends ControllerBase {
    /**
    * The calculator.
    *
-   * @var \Drupal\parking\Services\CalculateCostService
+   * @var \Drupal\parking\Services\CostService
    */
   protected $calculator;
 
@@ -31,10 +31,10 @@ class DepartureController extends ControllerBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
    *   The entitytypeManager.
-   * @param \Drupal\parking\Services\CalculateCostService $calculator
+   * @param \Drupal\parking\Services\CostService $calculator
    *   The calculator
    */
-  public function __construct(EntityTypeManager $entityTypeManager, CalculateCostService $calculator) {
+  public function __construct(EntityTypeManager $entityTypeManager, CostService $calculator) {
     $this->entityTypeManager = $entityTypeManager;
     $this->calculator = $calculator;
   }
