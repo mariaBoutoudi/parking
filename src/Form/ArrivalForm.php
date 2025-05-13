@@ -122,9 +122,8 @@ class ArrivalForm extends FormBase {
   //  A message shown after the submission.
     \Drupal::messenger()->addMessage($this->t('The car plate has been saved with the id ' .  $timestamp));
 
-    // TO DO ----> create a dashboard page.
-    // TO DO ----> redirect to dashboard page after car plate has been saved.
-    //  $form_state->setRedirect('dashboard');
+    // Redirect to dashboard page.  
+    $form_state->setRedirect('parking_dashboard');
 
   }
 

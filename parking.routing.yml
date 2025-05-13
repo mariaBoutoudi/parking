@@ -14,3 +14,11 @@ parking_departure_form:
     book_id: NULL
   requirements:
     _permission: "access content"
+
+parking_dashboard:
+  path: "/dashboard"
+  defaults:
+    _controller: '\Drupal\parking\Controller\DashboardController::content'
+    _title: "Parking Dashboard"
+  requirements:
+    _permission: "access content"

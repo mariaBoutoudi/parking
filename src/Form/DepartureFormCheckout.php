@@ -136,16 +136,11 @@ class DepartureFormCheckout extends FormBase {
     // Show a message.
     \Drupal::messenger()->addMessage($this->t("Successful registration."));
 
-    // }
-
-    // else {
-
-    //   // If we already have a node saved.
+      // If we already have a node saved.
       if ($nodeEntity) {
 
-    //     // Redirect to routing 'parking_departure_form'.
-    //     // Path: '/departureform/book_id'.
-        $form_state->setRedirect('parking_departure_form', ['book_id' => $form_state->getValue('car_id')]);
+       // Redirect to routing 'parking_dashboard'.
+        $form_state->setRedirect('parking_dashboard');
       }
 
     //   // If the Car id does not exist.
