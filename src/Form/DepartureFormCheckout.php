@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\Entity\Node;
 use Drupal\Core\Entity\EntityTypeManager;
-use Drupal\parking\Services\CostService;
+use Drupal\parking\Services\ParkingService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -24,7 +24,7 @@ class DepartureFormCheckout extends FormBase {
      /**
    * The calculator.
    *
-   * @var \Drupal\parking\Services\CostService
+   * @var \Drupal\parking\Services\ParkingService
    */
   protected $calculator;
 
@@ -33,10 +33,10 @@ class DepartureFormCheckout extends FormBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
    *   The entitytypeManager.
-   * @param \Drupal\parking\Services\CostService $calculator
+   * @param \Drupal\parking\Services\ParkingService $calculator
    *   The calculator
    */
-  public function __construct(EntityTypeManager $entityTypeManager, CostService $calculator) {
+  public function __construct(EntityTypeManager $entityTypeManager, ParkingService $calculator) {
     $this->entityTypeManager = $entityTypeManager;
     $this->calculator = $calculator;
   }

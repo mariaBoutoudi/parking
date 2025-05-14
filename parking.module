@@ -69,7 +69,10 @@ function parking_theme($existing, $type, $theme, $path) {
             'currentdate' => '',
             'arrivalbutton' => '',
             'departurebutton' => '',
+            'occupiedpositions' => '',
+            'availablepositions' => '',
             'carlist' => '',
+            'cache' => '',
 
         ],
     ],

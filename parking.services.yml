@@ -1,3 +1,4 @@
 services:
   parking.calculation:
-    class: Drupal\parking\Services\CostService
+    class: Drupal\parking\Services\ParkingService
+    arguments: ["@entity_type.manager"]
