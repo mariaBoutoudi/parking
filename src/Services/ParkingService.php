@@ -100,5 +100,27 @@ use Drupal\Core\Entity\EntityTypeManager;
   return $occupiedPositions;
 
   }
+
+public function getCarsWithNoPayment(){
+
+    // Get the nodes.
+   $query = $this->entityTypeManager->getStorage('node')->getQuery();
+
+  //  Get parking nodes id with the specific fields.
+   $nodes = $query
+      ->condition('type', 'parking')
+      ->condition('status', 1)
+      ->condition('field_payment', '1', '<>')
+      ->condition('field_datetime_out', NULL, 'IS NOT NULL')
+      ->accessCheck(FALSE)
+      ->execute();
+
+    $carNoPay = $this->entityTypeManager->getStorage('node')->loadMultiple($nodes);
+
+    $cars = count($carNoPay);
+
+    return $cars;
+
+}
  }
 

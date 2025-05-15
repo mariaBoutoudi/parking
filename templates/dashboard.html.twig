@@ -1,8 +1,10 @@
 <p>Date: {{ currentdate }}</p>
 <p>The charge for the first hour is {{ firsthour }} euros</p>
 <p>The charge per hour is {{ perhour }} euros</p>
-<p>Available positions: {{ availablepositions }}</p>
-<p>Occupied positions: {{ occupiedpositions }}</p>
+<p>Available spots: {{ availablepositions }}</p>
+<p>Occupied spots: {{ occupiedpositions }}</p>
+<p><a href="{{ path('parking_arrival_form') }}">Cars with debt: {{ carsnotpaid }}</a></p>
 <a href="{{ path('parking_arrival_form') }}" class="button--primary button">{{ arrivalbutton }}</a>
 <a href="{{ path('parking_departure_form') }}" class="button--primary button">{{ departurebutton }}</a>
 <a href="{{ path('parking_departure_form') }}" class="button--primary button">{{ carlist }}</a>
+<a href="{{ path('parking_departure_form') }}" class="button--primary button">{{ reservation }}</a>
