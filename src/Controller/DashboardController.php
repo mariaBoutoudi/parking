@@ -6,6 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\parking\Services\ParkingService;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 
 /**
@@ -28,16 +29,26 @@ class DashboardController extends ControllerBase {
   protected $calculator;
 
   /**
+   * Configuration factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * The constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
    *   The entitytypeManager.
    * @param \Drupal\parking\Services\ParkingService $calculator
    *   The calculator
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   The configuration factory.
    */
-  public function __construct(EntityTypeManager $entityTypeManager, ParkingService $calculator) {
+  public function __construct(EntityTypeManager $entityTypeManager, ParkingService $calculator, ConfigFactoryInterface $configFactory) {
     $this->entityTypeManager = $entityTypeManager;
     $this->calculator = $calculator;
+    $this->configFactory = $configFactory;
   }
 
   /**
@@ -45,10 +56,13 @@ class DashboardController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     // Instantiates this form class.
-    return new self(
+    return new static(
       // Load the service required to construct this class.
       $container->get('entity_type.manager'),
-      $container->get('parking.calculation')
+      $container->get('parking.calculation'),
+      $container->get('config.factory'),
+
+      
     );
   }  
 
@@ -59,7 +73,7 @@ class DashboardController extends ControllerBase {
    */
   public function content() {
 
-    $totalPositions = '100';
+    $totalPositions = $this->configFactory->get('parking.config.form')->get('total_positions');
     $occupiedPositions = $this->calculator->getSpecificParkingNodes();
 
     // // Get the available car positions.

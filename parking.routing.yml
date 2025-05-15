@@ -22,3 +22,11 @@ parking_dashboard:
     _title: "Parking Dashboard"
   requirements:
     _permission: "access content"
+
+parking_config_form:
+  path: "/admin/config/parking"
+  defaults:
+    _form: '\Drupal\parking\Form\ParkingConfigForm'
+    _title: "Parking Config Form"
+  requirements:
+    _permission: "administer site configuration"

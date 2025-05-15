@@ -2,7 +2,7 @@
 
 namespace Drupal\parking\Services;
 
-use Drupal\parking\ConstantsController;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManager;
 
 /**
@@ -18,13 +18,23 @@ use Drupal\Core\Entity\EntityTypeManager;
   protected $entityTypeManager;
 
   /**
+   * Configuration factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * The constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
    *   The entitytypeManager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   The configuration factory.
    */
-  public function __construct(EntityTypeManager $entityTypeManager) {
+  public function __construct(EntityTypeManager $entityTypeManager, ConfigFactoryInterface $configFactory) {
     $this->entityTypeManager = $entityTypeManager;
+    $this->configFactory = $configFactory;
   }
  
  /**
@@ -42,11 +52,11 @@ use Drupal\Core\Entity\EntityTypeManager;
 
     // The cost for the first hour.
     // Comes from the CONSTANTS in the controller.
-    $firstHour = ConstantsController::FIRST_HOUR;
+    $firstHour = $this->configFactory->get('parking.config.form')->get('first_hour');
 
     // The cost for each hour.
     // Comes from the CONSTANTS in the controller.
-    $pricePerHour = ConstantsController::PRICE_PER_HOUR;
+    $pricePerHour = $this->configFactory->get('parking.config.form')->get('per_hour');
 
     // Calculate the time the car was in parking.
     // The values are in timestamp.
