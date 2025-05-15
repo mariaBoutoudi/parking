@@ -76,6 +76,7 @@ function parking_theme($existing, $type, $theme, $path) {
             'firsthour' => '',
             'carsnotpaid' => '',
             'reservation' => '',
+            'debts' => '',
             'cache' => '',
 
         ],

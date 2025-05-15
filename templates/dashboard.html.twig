@@ -3,7 +3,7 @@
 <p>The charge per hour is {{ perhour }} euros</p>
 <p>Available spots: {{ availablepositions }}</p>
 <p>Occupied spots: {{ occupiedpositions }}</p>
-<p><a href="{{ path('parking_arrival_form') }}">Cars with debt: {{ carsnotpaid }}</a></p>
+<p>Cars with debt: {{ carsnotpaid }} <a href="{{ path('parking_arrival_form') }}"> {{ debts }}</a></p>
 <a href="{{ path('parking_arrival_form') }}" class="button--primary button">{{ arrivalbutton }}</a>
 <a href="{{ path('parking_departure_form') }}" class="button--primary button">{{ departurebutton }}</a>
 <a href="{{ path('parking_departure_form') }}" class="button--primary button">{{ carlist }}</a>

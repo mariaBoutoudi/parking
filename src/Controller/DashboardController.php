@@ -96,6 +96,7 @@ class DashboardController extends ControllerBase {
         '#perhour' => $chargePerHour,
         '#firsthour' => $FirstHourCharge,
         '#carsnotpaid' => $carsNotPaid,
+        '#debts' => 'See More',
         '#reservation' => 'Reservation for parking spot',
         '#cache' => ['max-age' => 0,
   ],
