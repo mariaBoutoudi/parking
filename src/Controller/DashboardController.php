@@ -73,8 +73,11 @@ class DashboardController extends ControllerBase {
    */
   public function content() {
 
+    // Get values to be used in twig template.
     $totalPositions = $this->configFactory->get('parking.config.form')->get('total_positions');
     $occupiedPositions = $this->calculator->getSpecificParkingNodes();
+    $chargePerHour = $this->configFactory->get('parking.config.form')->get('per_hour');
+    $FirstHourCharge = $this->configFactory->get('parking.config.form')->get('first_hour');
 
     // // Get the available car positions.
     $availablePositions = $totalPositions - $occupiedPositions;
@@ -89,6 +92,8 @@ class DashboardController extends ControllerBase {
         '#occupiedpositions' => $occupiedPositions,
         '#availablepositions' => $availablePositions,
         '#carlist' => 'Car list',
+        '#perhour' => $chargePerHour,
+        '#firsthour' => $FirstHourCharge,
         '#cache' => ['max-age' => 0,
   ],
     ];
