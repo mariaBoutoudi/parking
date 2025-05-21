@@ -85,7 +85,7 @@ class DashboardController extends ControllerBase {
     $availablePositions = $totalPositions - $occupiedPositions;
 
     // Get route from view car-list.
-    $url = Url::fromRoute('view.car_list.page_1');
+    $url = Url::fromRoute('view.car_list.page_carlist');
     $carListUri = $url->toString();
 
     return [
