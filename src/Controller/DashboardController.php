@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityTypeManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\parking\Services\ParkingService;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Url;
 
 
 /**
@@ -80,13 +81,17 @@ class DashboardController extends ControllerBase {
     $FirstHourCharge = $this->configFactory->get('parking.config.form')->get('first_hour');
     $carsNotPaid = $this->calculator->getCarsWithNoPayment();
 
-    // // Get the available car positions.
+    // Get the available car positions.
     $availablePositions = $totalPositions - $occupiedPositions;
+
+    // Get route from view car-list.
+    $url = Url::fromRoute('view.car_list.page_1');
+    $carListUri = $url->toString();
 
     return [
         // Your theme hook name.
         '#theme' => 'dashboard_template',
-        // // Your variables.
+        // Your variables.
         '#currentdate' => date('d-m-Y'),
         '#arrivalbutton' => 'Arrival Form',
         '#departurebutton' => 'Departure Form',
@@ -98,8 +103,9 @@ class DashboardController extends ControllerBase {
         '#carsnotpaid' => $carsNotPaid,
         '#debts' => 'See More',
         '#reservation' => 'Reservation for parking spot',
+        '#urlcarlist' => $carListUri,
         '#cache' => ['max-age' => 0,
-  ],
+],
     ];
   }
 

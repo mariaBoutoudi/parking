@@ -30,6 +30,7 @@ class ArrivalForm extends FormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Car Plate'),
       '#required' => TRUE,
+
     ];
 
     // Submit button.
