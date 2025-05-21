@@ -95,9 +95,9 @@ use Drupal\Core\Entity\EntityTypeManager;
   $parkingNodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nodes);
 
   // Get the number of cars in the parking.
-  $occupiedPositions = count($parkingNodes);
+  $occupiedSpaces = count($parkingNodes);
 
-  return $occupiedPositions;
+  return $occupiedSpaces;
 
   }
 

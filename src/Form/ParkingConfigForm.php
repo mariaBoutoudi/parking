@@ -46,11 +46,11 @@ class ParkingConfigForm extends ConfigFormBase {
      
     ];
 
-    $form['total_positions'] = [
+    $form['total_spaces'] = [
       '#type' => 'number',
-      '#title' => $this->t('Total Parking Position'),
-      '#description' => $this->t('The total positions of the parking'),
-      '#default_value' => $this->config('parking.config.form')->get('total_positions'),
+      '#title' => $this->t('Total Parking Spaces'),
+      '#description' => $this->t('Total spaces of the parking'),
+      '#default_value' => $this->config('parking.config.form')->get('total_spaces'),
 
     ];
 
@@ -73,7 +73,7 @@ class ParkingConfigForm extends ConfigFormBase {
     // will have the last values the user typed.
       ->set('first_hour', $form_state->getValue('first_hour'))
       ->set('per_hour', $form_state->getValue('per_hour'))
-      ->set('total_positions', $form_state->getValue('total_positions'))
+      ->set('total_spaces', $form_state->getValue('total_spaces'))
       ->save();
     parent::submitForm($form, $form_state);
   }

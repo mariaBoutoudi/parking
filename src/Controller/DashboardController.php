@@ -75,35 +75,40 @@ class DashboardController extends ControllerBase {
   public function content() {
 
     // Get values to be used in twig template.
-    $totalPositions = $this->configFactory->get('parking.config.form')->get('total_positions');
-    $occupiedPositions = $this->calculator->getSpecificParkingNodes();
+    $totalSpaces = $this->configFactory->get('parking.config.form')->get('total_spaces');
+    $occupiedSpaces = $this->calculator->getSpecificParkingNodes();
     $chargePerHour = $this->configFactory->get('parking.config.form')->get('per_hour');
     $FirstHourCharge = $this->configFactory->get('parking.config.form')->get('first_hour');
-    $carsNotPaid = $this->calculator->getCarsWithNoPayment();
+    $unpaidtickets = $this->calculator->getCarsWithNoPayment();
 
     // Get the available car positions.
-    $availablePositions = $totalPositions - $occupiedPositions;
+    $availableSpaces = $totalSpaces - $occupiedSpaces;
 
     // Get route from view car-list.
-    $url = Url::fromRoute('view.car_list.page_carlist');
-    $carListUri = $url->toString();
+    $urlList = Url::fromRoute('view.car_list.page_carlist');
+    $carListUri = $urlList->toString();
+
+    // Get route from view debtors.
+    $urlDebtors = Url::fromRoute('view.car_list.page_debtors');
+    $debtorsUri = $urlDebtors->toString();
 
     return [
         // Your theme hook name.
         '#theme' => 'dashboard_template',
         // Your variables.
         '#currentdate' => date('d-m-Y'),
-        '#arrivalbutton' => 'Arrival Form',
-        '#departurebutton' => 'Departure Form',
-        '#occupiedpositions' => $occupiedPositions,
-        '#availablepositions' => $availablePositions,
-        '#carlist' => 'Car list',
+        '#arrivalbutton' => 'Add New Vehicle',
+        '#departurebutton' => 'Check Out Vehicle',
+        '#occupiedspaces' => $occupiedSpaces,
+        '#availablespaces' => $availableSpaces,
+        '#carlist' => 'Vehicles list',
         '#perhour' => $chargePerHour,
         '#firsthour' => $FirstHourCharge,
-        '#carsnotpaid' => $carsNotPaid,
-        '#debts' => 'See More',
+        '#unpaidtickets' => $unpaidtickets,
+        '#debtorsview' => 'See More',
         '#reservation' => 'Reservation for parking spot',
         '#urlcarlist' => $carListUri,
+        '#urldebtors' => $debtorsUri,
         '#cache' => ['max-age' => 0,
 ],
     ];

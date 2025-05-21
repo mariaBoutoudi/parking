@@ -2,7 +2,7 @@ parking_arrival_form:
   path: "/arrivalform"
   defaults:
     _controller: 'Drupal\parking\Controller\ArrivalController::content'
-    _title: "Arrival Form"
+    _title: "New Vehicle Registration"
   requirements:
     _permission: "access content"
 
@@ -10,7 +10,7 @@ parking_departure_form:
   path: "/departureform/{book_id}"
   defaults:
     _controller: 'Drupal\parking\Controller\DepartureController::content'
-    _title: "Departure Form"
+    _title: "Vehicle Departure Form"
     book_id: NULL
   requirements:
     _permission: "access content"
