@@ -92,6 +92,11 @@ class DashboardController extends ControllerBase {
     $urlDebtors = Url::fromRoute('view.car_list.page_debtors');
     $debtorsUri = $urlDebtors->toString();
 
+    // Get route from config parking settings.
+    $configFormUrl = Url::fromRoute('parking_config_form');
+    $configUri = $configFormUrl->toString();
+
+
     return [
         // Your theme hook name.
         '#theme' => 'dashboard_template',
@@ -109,6 +114,8 @@ class DashboardController extends ControllerBase {
         '#reservation' => 'Reservation for parking spot',
         '#urlcarlist' => $carListUri,
         '#urldebtors' => $debtorsUri,
+        '#configform' => $configUri,
+        '#change' => "Change",
         '#cache' => ['max-age' => 0,
 ],
     ];

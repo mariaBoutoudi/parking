@@ -79,6 +79,8 @@ function parking_theme($existing, $type, $theme, $path) {
             'debtorsview' => '',
             'urlcarlist' => '',
             'urldebtors' => '',
+            'configform' => '',
+            'change' => '',
             'cache' => '',
 
         ],

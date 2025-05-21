@@ -1,6 +1,6 @@
 <p>Date: {{ currentdate }}</p>
-<p>The charge for the first hour is {{ firsthour }} euros</p>
-<p>The charge per hour is {{ perhour }} euros</p>
+<p>The charge for the first hour is {{ firsthour }} euros <a href="{{ configform }}"> {{ change }}</a></p>
+<p>The charge per hour is {{ perhour }} euros <a href="{{ configform }}"> {{ change }}</a></p>
 <p>Available parking spaces: {{ availablespaces }}</p>
 <p>Occupied parking spaces: {{ occupiedspaces }}</p>
 <p>Vehicles with unpaid tickets: {{ unpaidtickets }} <a href="{{ urldebtors }}"> {{ debtorsview }}</a></p>
