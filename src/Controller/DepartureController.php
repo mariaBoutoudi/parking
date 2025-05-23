@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\parking\Services\ParkingService;
 
 /**
- * An example controller.
+ * An departure controller.
  */
 class DepartureController extends ControllerBase {
 
@@ -51,14 +51,19 @@ class DepartureController extends ControllerBase {
     );
   }  
 
+/**
+ * @param null $book_id
+ * 
+ * @return array
+ */
 public function content($book_id = NULL) {
 
+  // Set variables to be used.
   $currentTime = time();
   $node = '';
   $plateNum = '';
   $cost = '';
   
-
   //  If we already have a vehicle id in the url.
    if ($book_id) {
 
@@ -67,7 +72,7 @@ public function content($book_id = NULL) {
     $properties = ['title' => $book_id];
     $nodeEntity = $entityManager->getStorage('node')->loadByProperties($properties);
 
-    // // Get from the array [nodeid => {nodeObject}] the nodeObject.
+    // Get from the array [nodeid => {nodeObject}] the nodeObject.
     $node = reset($nodeEntity);
 
     // Get from the node entity the value of the vehicle plate.
@@ -93,14 +98,14 @@ public function content($book_id = NULL) {
     if ($nodeEntity) {
 
   // Get the departure form via controller.
-  // Put $book_id to be used in checkout form.
+  // Set $book_id as a parameter to be used in checkout form.
   $departureForm['departure_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\DepartureFormCheckout', $book_id);
     }
 
     // If there is no node.
     else {
         // Get the departure form via controller.
-  $departureForm['departure_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\DepartureFormSearch');
+        $departureForm['departure_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\DepartureFormSearch');
     }
    }
 
@@ -112,9 +117,9 @@ public function content($book_id = NULL) {
   
 
     return [
-        // Your theme hook name.
+        // The theme hook name.
         '#theme' => 'departure_template',
-        // // Your variables.
+        // The variables.
         '#bookid' => $book_id ,
         '#plateNum' => $plateNum,
         '#cost' => $cost,

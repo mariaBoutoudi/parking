@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Implements hook_theme().
  *
@@ -15,6 +14,7 @@
  */
 function parking_theme($existing, $type, $theme, $path) {
 
+    // Define the to twif files.
     $path = \Drupal::service('extension.list.module')->getPath('parking');
     
   return [

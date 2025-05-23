@@ -10,7 +10,7 @@ use Drupal\parking\Services\ParkingService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * The departure form.
+ * The departure checkout form.
  */
 class DepartureFormCheckout extends FormBase {
 
@@ -72,7 +72,6 @@ class DepartureFormCheckout extends FormBase {
     $form['payment'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Payment'),
-    // '#default_value' => 1,
     ];
 
     // Checkout button.
@@ -120,7 +119,7 @@ class DepartureFormCheckout extends FormBase {
     // Set the departure time of the vehicle.
     $out = time();
 
-    // Call the function which gives the total cost.
+    // Set a variable to be used.
     $cost = 'Cost cannot be calculated';
 
     // Get the value of the time type.
@@ -129,13 +128,15 @@ class DepartureFormCheckout extends FormBase {
     // In case the vehicle pays per hour.
     if($timeType == 'per_hour'){
 
+      // Call the function which gives the total cost.
       // Calculate the cost via ParkingService.
         $cost = $this->calculator->calculateCostPerHour($in, $out);
     }
 
     // If the vehicle pays per day.
     else{
-      
+
+      // Call the function which gives the total cost.
       // Calculate the cost via ParkingService.
       $cost = $this->calculator->calculateCostPerDay($in, $out);
     }
@@ -159,7 +160,7 @@ class DepartureFormCheckout extends FormBase {
         $form_state->setRedirect('parking_dashboard');
       }
 
-    //   // If the Vehicle id does not exist.
+      // If the vehicle id does not exist.
       else {
 
         // Show a message.

@@ -60,13 +60,12 @@ class ArrivalForm extends FormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
 
-    // Set a value for the of car id.
+    // Set a value for the vehicle id.
     $id = $form_state->getValue('vehicle_plate');
     
-    // Remove "-" or space from the car id string.
-    $str_vehicle = str_replace([" ", "-"], "", $id);
-
+    // Remove "-" or space from the vehicle id string.
     // The string should have 7 characters.
+    $str_vehicle = str_replace([" ", "-"], "", $id);
 
     // In case there are 7 characters.
     if(strlen($str_vehicle) == "7"){
@@ -74,12 +73,13 @@ class ArrivalForm extends FormBase {
     // Convert the car id into an array.
     $array_vehicle = str_split($str_vehicle);
 
-    // Loop through the car id array of 7 characters.
+    // Loop through the vehicle id array of 7 characters.
     // We will use both the key and value of the array.
     foreach($array_vehicle as $key => $item){
 
     // The first 3 must be alphabetic.
     // The last 4 must be numbers.
+
     // Check the first three items of the array by their key.
     if($key < 3){
   
@@ -106,7 +106,7 @@ class ArrivalForm extends FormBase {
     }
   }
 
-  // In case there are more or less (than 7) characters in the car id string.
+  // In case there are more or less (than 7) characters in the vehicle id string.
   else{
 
   // Error message.
@@ -122,8 +122,8 @@ class ArrivalForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
     // Create a node after submission.
-    // Node fields: car plate, date/time of car arrival.
-    // Set as null the date/time of car departure.
+    // Node fields: vehicle id, plate, date/time of arrival, time type.
+    // Set as null the date/time of vehicle departure.
     $new_node = Node::create(['type' => 'parking']);
     $timestamp = time();
     $new_node->set('title', $timestamp);

@@ -51,11 +51,11 @@ use Drupal\Core\Entity\EntityTypeManager;
   public function calculateCostPerHour($checkIn, $checkOut) {
 
     // The cost for the first hour.
-    // Comes from the config form.
+    // from the config form.
     $firstHour = $this->configFactory->get('parking.config.form')->get('first_hour');
 
     // The cost for each hour.
-    // Comes from the config form.
+    // from the config form.
     $pricePerHour = $this->configFactory->get('parking.config.form')->get('per_hour');
 
     // Calculate the time the vehicle was in parking.
@@ -67,7 +67,7 @@ use Drupal\Core\Entity\EntityTypeManager;
 
     // Round up the hours.
     // Extract the first hour cause the cost is different.
-    // Multiply the left hours with the price per hour.
+    // Multiply the hours left with the price per hour.
     // Add to final cost (in euros) the first hour price.
     $cost = ((ceil($hours) - 1) * $pricePerHour) + $firstHour;
     return $cost;
@@ -109,7 +109,7 @@ use Drupal\Core\Entity\EntityTypeManager;
   }
 
   /**
-   * @return [type]
+   * @return string
    */
   public function getSpecificParkingNodes() {
 
@@ -149,8 +149,10 @@ public function getCarsWithNoPayment(){
       ->accessCheck(FALSE)
       ->execute();
 
+    // Load the specific nodes
     $vehicleNoPay = $this->entityTypeManager->getStorage('node')->loadMultiple($nodes);
 
+    // Get the number of vehicles that did not pay.
     $vehicles = count($vehicleNoPay);
 
     return $vehicles;

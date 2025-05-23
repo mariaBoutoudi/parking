@@ -70,8 +70,8 @@ class ParkingConfigForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $this->config('parking.config.form')
-    // When the submit button is pressed the form fields
-    // will have the last values the user typed.
+    
+    // The default values of the form fields.
       ->set('first_hour', $form_state->getValue('first_hour'))
       ->set('per_hour', $form_state->getValue('per_hour'))
       ->set('per_day', $form_state->getValue('per_day'))

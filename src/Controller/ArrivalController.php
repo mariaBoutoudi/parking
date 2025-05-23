@@ -5,12 +5,14 @@ namespace Drupal\parking\Controller;
 use Drupal\Core\Controller\ControllerBase;
 
 /**
- * An example controller.
+ * The arrival controller.
  */
 class ArrivalController extends ControllerBase {
 
 /**
- * @return [type]
+ * Return the arrival form.
+ * 
+ * @return array
  */
 public function content() {
 
@@ -18,9 +20,9 @@ public function content() {
         $arrivalForm['arrival_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\ArrivalForm');
 
     return [
-        // Your theme hook name.
+        // The theme hook name.
         '#theme' => 'arrival_template',
-        // // Your variables.
+        // The variables.
         '#arrivalform' => $arrivalForm,
     ];
   

@@ -11,7 +11,7 @@ use Drupal\Core\Url;
 
 
 /**
- * An example controller.
+ * The dashboard controller.
  */
 class DashboardController extends ControllerBase {
 
@@ -68,13 +68,13 @@ class DashboardController extends ControllerBase {
   }  
 
   /**
-   * Returns a renderable array for a test page.
+   * Returns a renderable array for a dashboard page.
    *
-   * return []
+   * @return array
    */
   public function content() {
 
-    // Get values to be used in twig template.
+    // Get values from the config form to be used in twig template.
     $totalSpaces = $this->configFactory->get('parking.config.form')->get('total_spaces');
     $occupiedSpaces = $this->calculator->getSpecificParkingNodes();
     $chargePerHour = $this->configFactory->get('parking.config.form')->get('per_hour');
@@ -82,14 +82,14 @@ class DashboardController extends ControllerBase {
     $unpaidtickets = $this->calculator->getCarsWithNoPayment();
     $chargePerDay = $this->configFactory->get('parking.config.form')->get('per_day');
 
-    // Get the available car positions.
+    // Get the available vehicle positions.
     $availableSpaces = $totalSpaces - $occupiedSpaces;
 
-    // Get route from view car-list.
+    // Get route from view 'car-list'.
     $urlList = Url::fromRoute('view.car_list.page_vehiclelist');
     $carListUri = $urlList->toString();
 
-    // Get route from view debtors.
+    // Get route from view 'debtors'.
     $urlDebtors = Url::fromRoute('view.car_list.page_debtors');
     $debtorsUri = $urlDebtors->toString();
 
@@ -99,9 +99,9 @@ class DashboardController extends ControllerBase {
 
 
     return [
-        // Your theme hook name.
+        // The theme hook name.
         '#theme' => 'dashboard_template',
-        // Your variables.
+        // The variables.
         '#currentdate' => date('d-m-Y'),
         '#arrivalbutton' => 'Add New Vehicle',
         '#departurebutton' => 'Check Out Vehicle',

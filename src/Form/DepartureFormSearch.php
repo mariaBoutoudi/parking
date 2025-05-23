@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityTypeManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * The departure form.
+ * The departure search form.
  */
 class DepartureFormSearch extends FormBase {
 
@@ -77,7 +77,7 @@ class DepartureFormSearch extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
-    // Get the car id from its form fiels.
+    // Get the vehicle id from its form fields.
     $vehicleId = $form_state->getValue('vehicle_id');
 
     // Load entity type manager service.
