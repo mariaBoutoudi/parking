@@ -80,6 +80,7 @@ function parking_theme($existing, $type, $theme, $path) {
             'urldebtors' => '',
             'configform' => '',
             'change' => '',
+            'perday' => '',
             'cache' => '',
 
         ],

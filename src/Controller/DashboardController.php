@@ -80,6 +80,7 @@ class DashboardController extends ControllerBase {
     $chargePerHour = $this->configFactory->get('parking.config.form')->get('per_hour');
     $FirstHourCharge = $this->configFactory->get('parking.config.form')->get('first_hour');
     $unpaidtickets = $this->calculator->getCarsWithNoPayment();
+    $chargePerDay = $this->configFactory->get('parking.config.form')->get('per_day');
 
     // Get the available car positions.
     $availableSpaces = $totalSpaces - $occupiedSpaces;
@@ -108,6 +109,7 @@ class DashboardController extends ControllerBase {
         '#availablespaces' => $availableSpaces,
         '#carlist' => 'Vehicles list',
         '#perhour' => $chargePerHour,
+        '#perday' => $chargePerDay,
         '#firsthour' => $FirstHourCharge,
         '#unpaidtickets' => $unpaidtickets,
         '#debtorsview' => 'See More',
