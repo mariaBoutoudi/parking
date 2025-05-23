@@ -38,7 +38,7 @@ use Drupal\Core\Entity\EntityTypeManager;
   }
  
  /**
-   * Calculate the cost that car must pay.
+   * Calculate the cost that vehicle must pay per hour.
    *
    * @param string $checkIn
    *   The arrival time.
@@ -48,17 +48,17 @@ use Drupal\Core\Entity\EntityTypeManager;
    * @return string
    *   The final cost.
    */
-  public function calculateCost($checkIn, $checkOut) {
+  public function calculateCostPerHour($checkIn, $checkOut) {
 
     // The cost for the first hour.
-    // Comes from the CONSTANTS in the controller.
+    // Comes from the config form.
     $firstHour = $this->configFactory->get('parking.config.form')->get('first_hour');
 
     // The cost for each hour.
-    // Comes from the CONSTANTS in the controller.
+    // Comes from the config form.
     $pricePerHour = $this->configFactory->get('parking.config.form')->get('per_hour');
 
-    // Calculate the time the car was in parking.
+    // Calculate the time the vehicle was in parking.
     // The values are in timestamp.
     $seconds = $checkOut - $checkIn;
 
@@ -71,6 +71,40 @@ use Drupal\Core\Entity\EntityTypeManager;
     // Add to final cost (in euros) the first hour price.
     $cost = ((ceil($hours) - 1) * $pricePerHour) + $firstHour;
     return $cost;
+
+  }
+
+  
+ /**
+   * Calculate the cost that vehicle must pay per day.
+   *
+   * @param string $checkIn
+   *   The arrival time.
+   * @param string $checkOut
+   *   The departure time.
+   *
+   * @return string
+   *   The final cost.
+   */
+  public function calculateCostPerDay($checkIn, $checkOut){
+
+    // The cost for the first day.
+    // Comes from the config form.
+    $pricePerDay = $this->configFactory->get('parking.config.form')->get('per_day');
+
+    // Calculate the time the vehicle was in parking in seconds.
+    // The values are in timestamp.
+    $parkingInSeconds = $checkOut - $checkIn;
+
+    // Convert the timestamp seconds in days.
+    $daySeconds = 24 * 3600;
+    $days = $parkingInSeconds / $daySeconds;
+
+    // Round up the days.
+    // Multiply the days with the price per day.
+    $cost = ceil($days) * $pricePerDay;
+    return $cost;
+
 
   }
 

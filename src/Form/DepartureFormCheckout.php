@@ -117,13 +117,29 @@ class DepartureFormCheckout extends FormBase {
     // Get the time the car came in parking.  
     $in = $node->get('field_datetime_in')->value;
 
-    // Set the departure time of the car.
+    // Set the departure time of the vehicle.
     $out = time();
 
     // Call the function which gives the total cost.
-    $cost = $this->calculator->calculateCost($in, $out);
+    $cost = 'Cost cannot be calculated';
 
- 
+    // Get the value of the time type.
+    $timeType = $node->get('field_time_type')->value;
+
+    // In case the vehicle pays per hour.
+    if($timeType == 'per_hour'){
+
+      // Calculate the cost via ParkingService.
+        $cost = $this->calculator->calculateCostPerHour($in, $out);
+    }
+
+    // If the vehicle pays per day.
+    else{
+      
+      // Calculate the cost via ParkingService.
+      $cost = $this->calculator->calculateCostPerDay($in, $out);
+    }
+   
 
     // Update the specific node with the values of the form fields.
     $update_node = Node::load($nid);
@@ -143,11 +159,11 @@ class DepartureFormCheckout extends FormBase {
         $form_state->setRedirect('parking_dashboard');
       }
 
-    //   // If the Car id does not exist.
+    //   // If the Vehicle id does not exist.
       else {
 
         // Show a message.
-        \Drupal::messenger()->addError($this->t("This car id does not exist."));
+        \Drupal::messenger()->addError($this->t("This vehicle id does not exist."));
 
         // Redirect to search form.
         $form_state->setRedirect('parking_departure_form');

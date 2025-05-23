@@ -46,6 +46,14 @@ class ParkingConfigForm extends ConfigFormBase {
      
     ];
 
+    $form['per_day'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Per Day'),
+      '#description' => $this->t('The cost per day'),
+      '#default_value' => $this->config('parking.config.form')->get('per_day'),
+  
+    ];
+
     $form['total_spaces'] = [
       '#type' => 'number',
       '#title' => $this->t('Total Parking Spaces'),
@@ -60,19 +68,13 @@ class ParkingConfigForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state): void {
-
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $this->config('parking.config.form')
     // When the submit button is pressed the form fields
     // will have the last values the user typed.
       ->set('first_hour', $form_state->getValue('first_hour'))
       ->set('per_hour', $form_state->getValue('per_hour'))
+      ->set('per_day', $form_state->getValue('per_day'))
       ->set('total_spaces', $form_state->getValue('total_spaces'))
       ->save();
     parent::submitForm($form, $form_state);

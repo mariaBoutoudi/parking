@@ -111,7 +111,6 @@ class DashboardController extends ControllerBase {
         '#firsthour' => $FirstHourCharge,
         '#unpaidtickets' => $unpaidtickets,
         '#debtorsview' => 'See More',
-        '#reservation' => 'Reservation for parking spot',
         '#urlcarlist' => $carListUri,
         '#urldebtors' => $debtorsUri,
         '#configform' => $configUri,

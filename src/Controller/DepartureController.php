@@ -59,7 +59,7 @@ public function content($book_id = NULL) {
   $cost = '';
   
 
-  //  If we already have a car id in the url.
+  //  If we already have a vehicle id in the url.
    if ($book_id) {
 
     // Load the node by its id from the url.
@@ -70,9 +70,25 @@ public function content($book_id = NULL) {
     // // Get from the array [nodeid => {nodeObject}] the nodeObject.
     $node = reset($nodeEntity);
 
+    // Get from the node entity the value of the vehicle plate.
     $plateNum = $node->get('field_car_plate')->value;
-    $cost = $this->calculator->calculateCost($node->get('field_datetime_in')->value, $currentTime);
 
+    // Get from the node entity the value of th time type.
+    $timeType = $node->get('field_time_type')->value;
+
+    // If the type of time is per hour.
+    if($timeType == 'per_hour'){
+
+      // Calculate the cost via ParkingService.
+      $cost = $this->calculator->calculateCostPerHour($node->get('field_datetime_in')->value, $currentTime);
+    }
+    // In case the time type is per day.
+    else{
+
+      // Calculate the cost via ParkingService.
+      $cost = $this->calculator->calculateCostPerDay($node->get('field_datetime_in')->value, $currentTime);
+    }
+  
     // In case the node exists.
     if ($nodeEntity) {
 
