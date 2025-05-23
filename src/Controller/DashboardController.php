@@ -86,7 +86,7 @@ class DashboardController extends ControllerBase {
     $availableSpaces = $totalSpaces - $occupiedSpaces;
 
     // Get route from view car-list.
-    $urlList = Url::fromRoute('view.car_list.page_carlist');
+    $urlList = Url::fromRoute('view.car_list.page_vehiclelist');
     $carListUri = $urlList->toString();
 
     // Get route from view debtors.
@@ -107,7 +107,7 @@ class DashboardController extends ControllerBase {
         '#departurebutton' => 'Check Out Vehicle',
         '#occupiedspaces' => $occupiedSpaces,
         '#availablespaces' => $availableSpaces,
-        '#carlist' => 'Vehicles list',
+        '#vehiclelist' => 'Vehicles list',
         '#perhour' => $chargePerHour,
         '#perday' => $chargePerDay,
         '#firsthour' => $FirstHourCharge,

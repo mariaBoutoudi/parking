@@ -1,3 +1,4 @@
+<div>
 <p>Date: {{ currentdate }}</p>
 <p>The charge for the first hour is {{ firsthour }} euros <a href="{{ configform }}"> {{ change }}</a></p>
 <p>The charge per hour is {{ perhour }} euros <a href="{{ configform }}"> {{ change }}</a></p>
@@ -7,4 +8,5 @@
 <p>Vehicles with unpaid tickets: {{ unpaidtickets }} <a href="{{ urldebtors }}"> {{ debtorsview }}</a></p>
 <a href="{{ path('parking_arrival_form') }}" class="button--primary button">{{ arrivalbutton }}</a>
 <a href="{{ path('parking_departure_form') }}" class="button--primary button">{{ departurebutton }}</a>
-<a href= "{{ urlcarlist }}" class="button--primary button">{{ carlist }}</a>
+<a href= "{{ urlcarlist }}" class="button--primary button">{{ vehiclelist }}</a>
+</div>

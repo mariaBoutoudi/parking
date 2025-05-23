@@ -6,7 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManager;
 
 /**
- * The ParkingService calcutator class.
+ * The ParkingService calculator class.
  */
  class ParkingService {
 
@@ -128,7 +128,7 @@ use Drupal\Core\Entity\EntityTypeManager;
   // Load the filtered nodes by their id.
   $parkingNodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nodes);
 
-  // Get the number of cars in the parking.
+  // Get the number of vehicles in the parking.
   $occupiedSpaces = count($parkingNodes);
 
   return $occupiedSpaces;
@@ -149,11 +149,11 @@ public function getCarsWithNoPayment(){
       ->accessCheck(FALSE)
       ->execute();
 
-    $carNoPay = $this->entityTypeManager->getStorage('node')->loadMultiple($nodes);
+    $vehicleNoPay = $this->entityTypeManager->getStorage('node')->loadMultiple($nodes);
 
-    $cars = count($carNoPay);
+    $vehicles = count($vehicleNoPay);
 
-    return $cars;
+    return $vehicles;
 
 }
  }

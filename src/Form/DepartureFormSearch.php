@@ -55,10 +55,10 @@ class DepartureFormSearch extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    // The unique id of the car.
-    $form['car_id'] = [
+    // The unique id of the vehicle.
+    $form['vehicle_id'] = [
       '#type' => 'number',
-      '#title' => $this->t('Car ID'),
+      '#title' => $this->t('Vehicle ID'),
       '#required' => TRUE,
     ];
 
@@ -78,13 +78,13 @@ class DepartureFormSearch extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
     // Get the car id from its form fiels.
-    $carId = $form_state->getValue('car_id');
+    $vehicleId = $form_state->getValue('vehicle_id');
 
     // Load entity type manager service.
     $entityManager = $this->entityTypeManager;
 
     // Load node by its title.
-    $properties = ['title' => $carId];
+    $properties = ['title' => $vehicleId];
     $nodeEntity = $entityManager->getStorage('node')->loadByProperties($properties);
 
     // If we already have a node saved.
@@ -92,14 +92,14 @@ class DepartureFormSearch extends FormBase {
 
       // Redirect to routing 'parking_departure_form'.
       // Path: '/departureform/book_id'.
-      $form_state->setRedirect('parking_departure_form', ['book_id' => $form_state->getValue('car_id')]);
+      $form_state->setRedirect('parking_departure_form', ['book_id' => $form_state->getValue('vehicle_id')]);
     }
 
-    // If the Car id does not exist.
+    // If the vehicle id does not exist.
     else {
 
       // Show a message.
-      \Drupal::messenger()->addError($this->t("This car id does not exist."));
+      \Drupal::messenger()->addError($this->t("This vehicle id does not exist."));
 
       // Redirect to search form.
       $form_state->setRedirect('parking_departure_form');

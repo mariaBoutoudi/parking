@@ -71,7 +71,7 @@ function parking_theme($existing, $type, $theme, $path) {
             'departurebutton' => '',
             'occupiedspaces' => '',
             'availablespaces' => '',
-            'carlist' => '',
+            'vehiclelist' => '',
             'perhour' => '',
             'firsthour' => '',
             'unpaidtickets' => '',
