@@ -1,5 +1,5 @@
 <div class="depart-form">
-<div>{% if plateNum is not empty %}
+{% if plateNum is not empty %}
 <p>The vehicle plate is {{ plateNum }}.</p>
 {% endif %}
 
@@ -13,7 +13,5 @@
 Please check 'Payment' when the receipt has been issued.</p>
 {% endif %} 
 
-</div>
-
-<div> {{ departureform }}</div>
+{{ departureform }}
 </div>

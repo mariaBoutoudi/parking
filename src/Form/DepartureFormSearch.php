@@ -68,7 +68,7 @@ class DepartureFormSearch extends FormBase {
       '#value' => $this->t('Search'),
       '#button_type' => 'primary',
     ];
-    
+
     return $form;
   }
 
@@ -104,7 +104,7 @@ class DepartureFormSearch extends FormBase {
       // Redirect to search form.
       $form_state->setRedirect('parking_departure_form');
     }
-  
+
   }
 
 }

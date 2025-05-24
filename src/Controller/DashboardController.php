@@ -9,7 +9,6 @@ use Drupal\parking\Services\ParkingService;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Url;
 
-
 /**
  * The dashboard controller.
  */
@@ -22,7 +21,7 @@ class DashboardController extends ControllerBase {
    */
   protected $entityTypeManager;
 
-   /**
+  /**
    * The calculator.
    *
    * @var \Drupal\parking\Services\ParkingService
@@ -42,7 +41,7 @@ class DashboardController extends ControllerBase {
    * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
    *   The entitytypeManager.
    * @param \Drupal\parking\Services\ParkingService $calculator
-   *   The calculator
+   *   The calculator.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The configuration factory.
    */
@@ -63,14 +62,14 @@ class DashboardController extends ControllerBase {
       $container->get('parking.calculation'),
       $container->get('config.factory'),
 
-      
     );
-  }  
+  }
 
   /**
    * Returns a renderable array for a dashboard page.
    *
    * @return array
+   *   Render array with values.
    */
   public function content() {
 
@@ -78,8 +77,8 @@ class DashboardController extends ControllerBase {
     $totalSpaces = $this->configFactory->get('parking.config.form')->get('total_spaces');
     $occupiedSpaces = $this->calculator->getSpecificParkingNodes();
     $chargePerHour = $this->configFactory->get('parking.config.form')->get('per_hour');
-    $FirstHourCharge = $this->configFactory->get('parking.config.form')->get('first_hour');
-    $unpaidtickets = $this->calculator->getCarsWithNoPayment();
+    $firstHourCharge = $this->configFactory->get('parking.config.form')->get('first_hour');
+    $unpaidtickets = $this->calculator->getVehiclesWithNoPayment();
     $chargePerDay = $this->configFactory->get('parking.config.form')->get('per_day');
 
     // Get the available vehicle positions.
@@ -97,28 +96,27 @@ class DashboardController extends ControllerBase {
     $configFormUrl = Url::fromRoute('parking_config_form');
     $configUri = $configFormUrl->toString();
 
-
     return [
         // The theme hook name.
-        '#theme' => 'dashboard_template',
+      '#theme' => 'dashboard_template',
         // The variables.
-        '#currentdate' => date('d-m-Y'),
-        '#arrivalbutton' => 'Add New Vehicle',
-        '#departurebutton' => 'Check Out Vehicle',
-        '#occupiedspaces' => $occupiedSpaces,
-        '#availablespaces' => $availableSpaces,
-        '#vehiclelist' => 'Vehicles list',
-        '#perhour' => $chargePerHour,
-        '#perday' => $chargePerDay,
-        '#firsthour' => $FirstHourCharge,
-        '#unpaidtickets' => $unpaidtickets,
-        '#debtorsview' => 'See More',
-        '#urlcarlist' => $carListUri,
-        '#urldebtors' => $debtorsUri,
-        '#configform' => $configUri,
-        '#change' => "Change",
-        '#cache' => ['max-age' => 0,
-],
+      '#currentdate' => date('d-m-Y'),
+      '#arrivalbutton' => 'Add New Vehicle',
+      '#departurebutton' => 'Check Out Vehicle',
+      '#occupiedspaces' => $occupiedSpaces,
+      '#availablespaces' => $availableSpaces,
+      '#vehiclelist' => 'Vehicles list',
+      '#perhour' => $chargePerHour,
+      '#perday' => $chargePerDay,
+      '#firsthour' => $firstHourCharge,
+      '#unpaidtickets' => $unpaidtickets,
+      '#debtorsview' => 'See More',
+      '#urlcarlist' => $carListUri,
+      '#urldebtors' => $debtorsUri,
+      '#configform' => $configUri,
+      '#change' => "Change",
+      '#cache' => ['max-age' => 0,
+      ],
     ];
   }
 

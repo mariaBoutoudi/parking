@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * The parking module file.
+ */
+
+/**
  * Implements hook_theme().
  *
  * Register a module or theme's theme implementations.
@@ -14,76 +19,79 @@
  */
 function parking_theme($existing, $type, $theme, $path) {
 
-    // Define the to twif files.
-    $path = \Drupal::service('extension.list.module')->getPath('parking');
-    
+  // Define the to twif files.
+  $path = \Drupal::service('extension.list.module')->getPath('parking');
+
   return [
     'departure_template' => [
 
         // The name of the twig template (departure.html.twig).
-        'template' => 'departure',
+      'template' => 'departure',
 
         // Optionally define path to Twig template files.
-        // The directory path of the parking module, so that it doesn't need to be looked up.
-        'path' => $path . '/templates',
+        // The directory path of the parking module.
+        // So that it doesn't need to be looked up.
+      'path' => $path . '/templates',
 
         // Optionally define variables that will be passed to the Twig
         // template and set default values for them.
-        'variables' => [
-            'bookid' => '',
-            'plateNum' => '',
-            'cost' => '',
-            'departureform' => '',
+      'variables' => [
+        'bookid' => '',
+        'plateNum' => '',
+        'cost' => '',
+        'departureform' => '',
 
-        ],
+      ],
 
     ],
 
     'arrival_template' => [
         // The name of the twig template (departure.html.twig).
-        'template' => 'arrival',
+      'template' => 'arrival',
 
         // Optionally define path to Twig template files.
-        // The directory path of the parking module, so that it doesn't need to be looked up.
-        'path' => $path . '/templates',
+        // The directory path of the parking module.
+        // So that it doesn't need to be looked up.
+      'path' => $path . '/templates',
 
         // Optionally define variables that will be passed to the Twig
         // template and set default values for them.
-        'variables' => [
-            'arrivalform' => '',
+      'variables' => [
+        'arrivalform' => '',
 
-        ],
+      ],
     ],
 
     'dashboard_template' => [
         // The name of the twig template (departure.html.twig).
-        'template' => 'dashboard',
+      'template' => 'dashboard',
 
         // Optionally define path to Twig template files.
-        // The directory path of the parking module, so that it doesn't need to be looked up.
-        'path' => $path . '/templates',
+        // The directory path of the parking module.
+        // So that it doesn't need to be looked up.
+      'path' => $path . '/templates',
 
         // Optionally define variables that will be passed to the Twig
         // template and set default values for them.
-        'variables' => [
-            'currentdate' => '',
-            'arrivalbutton' => '',
-            'departurebutton' => '',
-            'occupiedspaces' => '',
-            'availablespaces' => '',
-            'vehiclelist' => '',
-            'perhour' => '',
-            'firsthour' => '',
-            'unpaidtickets' => '',
-            'debtorsview' => '',
-            'urlcarlist' => '',
-            'urldebtors' => '',
-            'configform' => '',
-            'change' => '',
-            'perday' => '',
-            'cache' => '',
+      'variables' => [
+        'currentdate' => '',
+        'arrivalbutton' => '',
+        'departurebutton' => '',
+        'occupiedspaces' => '',
+        'availablespaces' => '',
+        'vehiclelist' => '',
+        'perhour' => '',
+        'firsthour' => '',
+        'unpaidtickets' => '',
+        'debtorsview' => '',
+        'urlcarlist' => '',
+        'urldebtors' => '',
+        'configform' => '',
+        'change' => '',
+        'perday' => '',
+        'cache' => '',
 
-        ],
+      ],
     ],
-];
+  ];
 }

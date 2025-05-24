@@ -21,7 +21,7 @@ class DepartureFormCheckout extends FormBase {
    */
   protected $entityTypeManager;
 
-     /**
+  /**
    * The calculator.
    *
    * @var \Drupal\parking\Services\ParkingService
@@ -34,7 +34,7 @@ class DepartureFormCheckout extends FormBase {
    * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
    *   The entitytypeManager.
    * @param \Drupal\parking\Services\ParkingService $calculator
-   *   The calculator
+   *   The calculator.
    */
   public function __construct(EntityTypeManager $entityTypeManager, ParkingService $calculator) {
     $this->entityTypeManager = $entityTypeManager;
@@ -82,7 +82,7 @@ class DepartureFormCheckout extends FormBase {
     ];
 
     // Insert the value of $book_id in form_state.
-    // We get the value of $book_id from the controller 
+    // We get the value of $book_id from the controller
     // and set it as a parameter in buildForm.
     $form_state->set('bookId', $book_id);
 
@@ -93,7 +93,6 @@ class DepartureFormCheckout extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-
 
     // Get the bookid.
     // We set the value in build form.
@@ -113,7 +112,7 @@ class DepartureFormCheckout extends FormBase {
     // Get the id of the node array.
     $nid = $node->id();
 
-    // Get the time the car came in parking.  
+    // Get the time the car came in parking.
     $in = $node->get('field_datetime_in')->value;
 
     // Set the departure time of the vehicle.
@@ -126,21 +125,20 @@ class DepartureFormCheckout extends FormBase {
     $timeType = $node->get('field_time_type')->value;
 
     // In case the vehicle pays per hour.
-    if($timeType == 'per_hour'){
+    if ($timeType == 'per_hour') {
 
       // Call the function which gives the total cost.
       // Calculate the cost via ParkingService.
-        $cost = $this->calculator->calculateCostPerHour($in, $out);
+      $cost = $this->calculator->calculateCostPerHour($in, $out);
     }
 
     // If the vehicle pays per day.
-    else{
+    else {
 
       // Call the function which gives the total cost.
       // Calculate the cost via ParkingService.
       $cost = $this->calculator->calculateCostPerDay($in, $out);
     }
-   
 
     // Update the specific node with the values of the form fields.
     $update_node = Node::load($nid);
@@ -153,23 +151,23 @@ class DepartureFormCheckout extends FormBase {
     // Show a message.
     \Drupal::messenger()->addMessage($this->t("Successful registration."));
 
-      // If we already have a node saved.
-      if ($nodeEntity) {
+    // If we already have a node saved.
+    if ($nodeEntity) {
 
-       // Redirect to routing 'parking_dashboard'.
-        $form_state->setRedirect('parking_dashboard');
-      }
-
-      // If the vehicle id does not exist.
-      else {
-
-        // Show a message.
-        \Drupal::messenger()->addError($this->t("This vehicle id does not exist."));
-
-        // Redirect to search form.
-        $form_state->setRedirect('parking_departure_form');
-      }
-    
+      // Redirect to routing 'parking_dashboard'.
+      $form_state->setRedirect('parking_dashboard');
     }
+
+    // If the vehicle id does not exist.
+    else {
+
+      // Show a message.
+      \Drupal::messenger()->addError($this->t("This vehicle id does not exist."));
+
+      // Redirect to search form.
+      $form_state->setRedirect('parking_departure_form');
+    }
+
+  }
 
 }

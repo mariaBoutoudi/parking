@@ -9,23 +9,24 @@ use Drupal\Core\Controller\ControllerBase;
  */
 class ArrivalController extends ControllerBase {
 
-/**
- * Return the arrival form.
- * 
- * @return array
- */
-public function content() {
+  /**
+   * Return the arrival form.
+   *
+   * @return array
+   *   Render array with values.
+   */
+  public function content() {
 
-   // Get the arrival form via controller.
-        $arrivalForm['arrival_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\ArrivalForm');
+    // Get the arrival form via controller.
+    $arrivalForm['arrival_form'] = \Drupal::formBuilder()->getForm('Drupal\parking\Form\ArrivalForm');
 
     return [
         // The theme hook name.
-        '#theme' => 'arrival_template',
+      '#theme' => 'arrival_template',
         // The variables.
-        '#arrivalform' => $arrivalForm,
+      '#arrivalform' => $arrivalForm,
     ];
-  
-}
-  
+
+  }
+
 }

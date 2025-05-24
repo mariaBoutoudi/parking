@@ -10,7 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class ParkingConfigForm extends ConfigFormBase {
 
- /**
+  /**
    * {@inheritdoc}
    */
   public function getFormId(): string {
@@ -43,7 +43,7 @@ class ParkingConfigForm extends ConfigFormBase {
       '#title' => $this->t('Per Hour'),
       '#description' => $this->t('The cost per hour'),
       '#default_value' => $this->config('parking.config.form')->get('per_hour'),
-     
+
     ];
 
     $form['per_day'] = [
@@ -51,7 +51,7 @@ class ParkingConfigForm extends ConfigFormBase {
       '#title' => $this->t('Per Day'),
       '#description' => $this->t('The cost per day'),
       '#default_value' => $this->config('parking.config.form')->get('per_day'),
-  
+
     ];
 
     $form['total_spaces'] = [
@@ -70,7 +70,7 @@ class ParkingConfigForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $this->config('parking.config.form')
-    
+
     // The default values of the form fields.
       ->set('first_hour', $form_state->getValue('first_hour'))
       ->set('per_hour', $form_state->getValue('per_hour'))
@@ -79,6 +79,5 @@ class ParkingConfigForm extends ConfigFormBase {
       ->save();
     parent::submitForm($form, $form_state);
   }
- 
 
 }

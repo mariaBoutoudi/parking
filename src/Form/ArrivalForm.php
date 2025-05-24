@@ -33,15 +33,14 @@ class ArrivalForm extends FormBase {
 
     ];
 
-
     // The time type for the vehicle.
     $form['field_time_type'] = [
       '#type' => 'radios',
       '#title' => $this->t('Select type of time'),
       '#default_value' => 'per_hour',
       '#options' => [
-          'per_hour' => $this->t('Per hour'),
-          'per_day' => $this->t('Per day'),
+        'per_hour' => $this->t('Per hour'),
+        'per_day' => $this->t('Per day'),
       ],
 
     ];
@@ -62,57 +61,56 @@ class ArrivalForm extends FormBase {
 
     // Set a value for the vehicle id.
     $id = $form_state->getValue('vehicle_plate');
-    
+
     // Remove "-" or space from the vehicle id string.
     // The string should have 7 characters.
     $str_vehicle = str_replace([" ", "-"], "", $id);
 
     // In case there are 7 characters.
-    if(strlen($str_vehicle) == "7"){
+    if (strlen($str_vehicle) == "7") {
 
-    // Convert the car id into an array.
-    $array_vehicle = str_split($str_vehicle);
+      // Convert the car id into an array.
+      $array_vehicle = str_split($str_vehicle);
 
-    // Loop through the vehicle id array of 7 characters.
-    // We will use both the key and value of the array.
-    foreach($array_vehicle as $key => $item){
+      // Loop through the vehicle id array of 7 characters.
+      // We will use both the key and value of the array.
+      foreach ($array_vehicle as $key => $item) {
 
-    // The first 3 must be alphabetic.
-    // The last 4 must be numbers.
+        // The first 3 must be alphabetic.
+        // The last 4 must be numbers.
+        // Check the first three items of the array by their key.
+        if ($key < 3) {
 
-    // Check the first three items of the array by their key.
-    if($key < 3){
-  
-    // In case the first 3 are not latin characters.
-    $pattern = '/^[a-zA-Z]+$/';
-    if(!preg_match($pattern, $item)){
-   
-    // Error message.
-    $form_state->setErrorByName('vehicle_plate', 
-    $this->t('The vehicle plate id is not valid because @val is not a valid character.', ['@val' => $item]));
+          // In case the first 3 are not latin characters.
+          $pattern = '/^[a-zA-Z]+$/';
+          if (!preg_match($pattern, $item)) {
+
+            // Error message.
+            $form_state->setErrorByName('vehicle_plate',
+            $this->t('The vehicle plate id is not valid because @val is not a valid character.', ['@val' => $item]));
+          }
+        }
+        // Check the last 4 items of the array by their key.
+        else {
+
+          // In case the last 4 characters are not numbers.
+          if (!is_numeric($item)) {
+
+            // Error message.
+            $form_state->setErrorByName('vehicle_plate',
+            $this->t('The vehicle plate id is not valid because @val is not a number.', ['@val' => $item]));
+          }
+        }
+      }
     }
-  }
-    // Check the last 4 items of the array by their key.
-    else{
-    
-    // In case the last 4 characters are not numbers.
-    if(!is_numeric($item)){
 
-    // Error message.
-    $form_state->setErrorByName('vehicle_plate',
-    $this->t('The vehicle plate id is not valid because @val is not a number.',['@val' => $item]));
+    // If there are more or less (than 7) characters in the vehicle id string.
+    else {
+
+      // Error message.
+      $form_state->setErrorByName('vehicle_plate',
+      $this->t('The vehicle plate must have 7 characters.'));
     }
-  }
-    }
-  }
-
-  // In case there are more or less (than 7) characters in the vehicle id string.
-  else{
-
-  // Error message.
-  $form_state->setErrorByName('vehicle_plate', 
-  $this->t('The vehicle plate must have 7 characters.'));
-  }
 
   }
 
@@ -134,10 +132,10 @@ class ArrivalForm extends FormBase {
     $new_node->enforceIsNew();
     $new_node->save();
 
-  //  A message shown after the submission.
-    \Drupal::messenger()->addMessage($this->t('The vehicle plate has been saved with the id ' .  $timestamp));
+    // A message shown after the submission.
+    \Drupal::messenger()->addMessage($this->t('The vehicle plate has been saved with the id @id', ['@id' => $timestamp]));
 
-    // Redirect to dashboard page.  
+    // Redirect to dashboard page.
     $form_state->setRedirect('parking_dashboard');
 
   }

@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityTypeManager;
 /**
  * The ParkingService calculator class.
  */
- class ParkingService {
+class ParkingService {
 
   /**
    * The entitytypeManager.
@@ -36,8 +36,8 @@ use Drupal\Core\Entity\EntityTypeManager;
     $this->entityTypeManager = $entityTypeManager;
     $this->configFactory = $configFactory;
   }
- 
- /**
+
+  /**
    * Calculate the cost that vehicle must pay per hour.
    *
    * @param string $checkIn
@@ -74,8 +74,7 @@ use Drupal\Core\Entity\EntityTypeManager;
 
   }
 
-  
- /**
+  /**
    * Calculate the cost that vehicle must pay per day.
    *
    * @param string $checkIn
@@ -86,7 +85,7 @@ use Drupal\Core\Entity\EntityTypeManager;
    * @return string
    *   The final cost.
    */
-  public function calculateCostPerDay($checkIn, $checkOut){
+  public function calculateCostPerDay($checkIn, $checkOut) {
 
     // The cost for the first day.
     // Comes from the config form.
@@ -105,19 +104,21 @@ use Drupal\Core\Entity\EntityTypeManager;
     $cost = ceil($days) * $pricePerDay;
     return $cost;
 
-
   }
 
   /**
-   * @return string
+   * Get specific parking nodes.
+   *
+   * @return int
+   *   The number of occupied parking spots.
    */
   public function getSpecificParkingNodes() {
 
     // Get the nodes.
-   $query = $this->entityTypeManager->getStorage('node')->getQuery();
+    $query = $this->entityTypeManager->getStorage('node')->getQuery();
 
-  //  Get parking nodes id with the specific fields.
-   $nodes = $query
+    // Get parking nodes id with the specific fields.
+    $nodes = $query
       ->condition('type', 'parking')
       ->condition('status', 1)
       ->condition('field_payment', '1', '<>')
@@ -125,23 +126,26 @@ use Drupal\Core\Entity\EntityTypeManager;
       ->accessCheck(FALSE)
       ->execute();
 
-  // Load the filtered nodes by their id.
-  $parkingNodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nodes);
+    // Load the filtered nodes by their id.
+    $parkingNodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nodes);
 
-  // Get the number of vehicles in the parking.
-  $occupiedSpaces = count($parkingNodes);
+    // Get the number of vehicles in the parking.
+    $occupiedSpaces = count($parkingNodes);
 
-  return $occupiedSpaces;
+    return $occupiedSpaces;
 
   }
 
-public function getCarsWithNoPayment(){
+  /**
+   * Get vehicles without payment.
+   */
+  public function getVehiclesWithNoPayment() {
 
     // Get the nodes.
-   $query = $this->entityTypeManager->getStorage('node')->getQuery();
+    $query = $this->entityTypeManager->getStorage('node')->getQuery();
 
-  //  Get parking nodes id with the specific fields.
-   $nodes = $query
+    // Get parking nodes id with the specific fields.
+    $nodes = $query
       ->condition('type', 'parking')
       ->condition('status', 1)
       ->condition('field_payment', '1', '<>')
@@ -149,7 +153,7 @@ public function getCarsWithNoPayment(){
       ->accessCheck(FALSE)
       ->execute();
 
-    // Load the specific nodes
+    // Load the specific nodes.
     $vehicleNoPay = $this->entityTypeManager->getStorage('node')->loadMultiple($nodes);
 
     // Get the number of vehicles that did not pay.
@@ -157,6 +161,6 @@ public function getCarsWithNoPayment(){
 
     return $vehicles;
 
-}
- }
+  }
 
+}
