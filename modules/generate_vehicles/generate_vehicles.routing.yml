@@ -1,0 +1,7 @@
+generate_vehicles_form:
+  path: "/generateform"
+  defaults:
+    _controller: 'Drupal\generate_vehicles\Controller\GenerateVehiclesController::content'
+    _title: "Vehicles Generation"
+  requirements:
+    _permission: "access content"
