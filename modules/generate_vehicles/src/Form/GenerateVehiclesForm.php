@@ -100,10 +100,15 @@ class GenerateVehiclesForm extends FormBase {
     // Get the number of vehicles from the form field.  
     $numOfVehicles = $form_state->getValue('vehicles_number');
 
-    // @todo split total nodes in two parts 
-    // (some nodes for current day 2/3 and some for previous days 1/3) 
+    // Split total nodes in two parts.
+    // Some nodes for current day (2/3).
+    // Some for previous days (1/3).
 
-    
+    // Nodes for previous day.
+    $previousDay = $numOfVehicles / 3;
+
+    // Nodes for current day.
+    $currentDay = $numOfVehicles -$previousDay;
 
     // Get random vehicle plates.
     $randomVehiclePlate = $this->generateRandomVehiclePlates();
