@@ -23,7 +23,7 @@ function generate_vehicles_theme($existing, $type, $theme, $path) {
   $path = \Drupal::service('extension.list.module')->getPath('generate_vehicles');
 
   return [
-    'generate_vehicles_template'=> [
+    'generate_vehicles_template' => [
 
         // The name of the twig template (departure.html.twig).
       'template' => 'generate',

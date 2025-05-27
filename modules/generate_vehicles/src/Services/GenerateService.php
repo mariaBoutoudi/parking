@@ -7,43 +7,42 @@ namespace Drupal\generate_vehicles\Services;
  */
 class GenerateService {
 
+  /**
+   * Generate random vehicle plates.
+   *
+   * @return string
+   *   The vehicle plate.
+   */
+  public function generateRandomVehiclePlates() {
 
-/**
- * Generate random vehicle plates.
- * 
- * @return string
- *   The vehicle plate.
- */
-public function generateRandomVehiclePlates(){
+    // The letters for the vehicle plate.
+    $letters = 'ABEHIKMNOPTXYZ';
 
-  // The letters for the vehicle plate.
-  $letters = 'ABEHIKMNOPTXYZ';
+    // The length of $letters string.
+    $lettersLength = strlen($letters);
 
-  // The length of $letters string.
-  $lettersLength = strlen($letters);
-
-  // Set a value for the random letters.
-  $randomLetters = '';
+    // Set a value for the random letters.
+    $randomLetters = '';
 
     // Loop through the letters.
     // Choose random.
     for ($i = 0; $i < 3; $i++) {
-        $randomLetters .= $letters[random_int(0, $lettersLength - 1)];
+      $randomLetters .= $letters[random_int(0, $lettersLength - 1)];
     }
 
-  // The numbers for the vehicle plate.
-  $numbers = '0123456789';
+    // The numbers for the vehicle plate.
+    $numbers = '0123456789';
 
-  // The length of $numbers string.
-  $numbersLength = strlen($numbers);
+    // The length of $numbers string.
+    $numbersLength = strlen($numbers);
 
-  // Set a value for the random numbers.
-  $randomNumbers = '';
+    // Set a value for the random numbers.
+    $randomNumbers = '';
 
     // Loop through the numbers.
     // Choose random.
     for ($j = 0; $j < 4; $j++) {
-        $randomNumbers .= $numbers[random_int(0, $numbersLength - 1)];
+      $randomNumbers .= $numbers[random_int(0, $numbersLength - 1)];
     }
 
     // The final random vehicle plate.
@@ -52,75 +51,75 @@ public function generateRandomVehiclePlates(){
     // Return the vehicle plate.
     return $vehiclePlate;
 
-}
-
-/**
- * Generate random date.
- * 
- * @param boolean $today
- *   The reference to the current day.
- * 
- * @return string
- *   The date.
- */
-public function generateRandomDate($today = TRUE){
-
-  // Current time.
-  $timestamp = time();
-
-  // The reference to current day is TRUE.
-  if($today){
-
-  // Get only the date from the timestamp.
-  $getDate = date('d-m-Y', $timestamp);
-
-  // Get today's date in 6:00.
-  $startDate = strtotime($getDate . '06:00');
-
-  // The today's date one hour earlier.
-  // Set as departure time.  
-  $endDate = $timestamp - 3600;
-
-  }
-// The reference to current day is FALSE.
-  else{
-
-    // Set a variable to prenious day.
-    $yesterday = $timestamp - (3600 * 24);
-
-  // Get only the date from the timestamp.
-  $getDate = date('d-m-Y', $yesterday);
-
-  // Set as start date 6:00 yesterday.   
-  $startDate = strtotime($getDate . '06:00');
-
-//  Set as end date 22:00 yesterday
-  $endDate = strtotime($getDate . '22:00');
-
   }
 
-  // Get a random timestamp.
-  $randomDate = rand($startDate, $endDate);
+  /**
+   * Generate random date.
+   *
+   * @param bool $today
+   *   The reference to the current day.
+   *
+   * @return string
+   *   The date.
+   */
+  public function generateRandomDate($today = TRUE) {
 
-  // Return the random timestamp.
-  return $randomDate;
+    // Current time.
+    $timestamp = time();
 
-}
+    // The reference to current day is TRUE.
+    if ($today) {
 
-/**
- * Generate random the vehicle departure.
- * 
- * @param string $dateTimeIn
- *   The arrival time.
- * 
- * @return string
- *   Checkout time.
- */
-public function generateRandomDateOut($dateTimeIn){
+      // Get only the date from the timestamp.
+      $getDate = date('d-m-Y', $timestamp);
+
+      // Get today's date in 6:00.
+      $startDate = strtotime($getDate . '06:00');
+
+      // The today's date one hour earlier.
+      // Set as departure time.
+      $endDate = $timestamp - 3600;
+
+    }
+    // The reference to current day is FALSE.
+    else {
+
+      // Set a variable to prenious day.
+      $yesterday = $timestamp - (3600 * 24);
+
+      // Get only the date from the timestamp.
+      $getDate = date('d-m-Y', $yesterday);
+
+      // Set as start date 6:00 yesterday.
+      $startDate = strtotime($getDate . '06:00');
+
+      // Set as end date 22:00 yesterday.
+      $endDate = strtotime($getDate . '22:00');
+
+    }
+
+    // Get a random timestamp.
+    $randomDate = rand($startDate, $endDate);
+
+    // Return the random timestamp.
+    return $randomDate;
+
+  }
+
+  /**
+   * Generate random the vehicle departure.
+   *
+   * @param string $dateTimeIn
+   *   The arrival time.
+   *
+   * @return string
+   *   Checkout time.
+   */
+  public function generateRandomDateOut($dateTimeIn) {
 
     // The time vehicle departures.
     // Two hours after arrival.
-    $dateTimeOut = $dateTimeIn + (3600*2);
+    $dateTimeOut = $dateTimeIn + (3600 * 2);
 
     // Get random value for departure time.
     // Either NULL or 2 hours after arrival.
@@ -134,7 +133,6 @@ public function generateRandomDateOut($dateTimeIn){
 
     // Return the vehicle departure time.
     return $randomDateOut;
-}
-
+  }
 
 }
