@@ -121,7 +121,7 @@ class GenerateVehiclesForm extends FormBase {
     // Nodes for current day.
     $currentDay = $numOfVehicles - $previousDay;
 
-    // Set a variable for the batch.
+    // Set a variable for the batch operations.
     $operations = [];
 
     // Loop through the number of vehicles.
@@ -199,7 +199,7 @@ class GenerateVehiclesForm extends FormBase {
 
     }
 
-    // Create an array with the batch fields.
+    // Create and process the batch operations.
     $batch = [
       'title' => $this->t('Generate Vehicles'),
       'init_message' => $this->t('Starting to process vehicles.'),
@@ -260,7 +260,7 @@ class GenerateVehiclesForm extends FormBase {
    *   The context.
    */
   public static function createBatchNode(array $values, &$context) {
-    sleep(3);
+
     // Create node of type parking.
     $new_node = Node::create(['type' => 'parking']);
 
