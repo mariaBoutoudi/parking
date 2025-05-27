@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\Entity\Node;
 use Drupal\parking\Services\ParkingService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\generate_vehicles\Services\GenerateService;
 
 /**
  * The generate class for the module.
@@ -20,14 +21,26 @@ class GenerateVehiclesForm extends FormBase {
    */
   protected $calculator;
 
+    /**
+   * The generator.
+   *
+   * @var \Drupal\generate_vehicles\Services\GenerateService
+   */
+  protected $generator;
+
+  
   /**
    * The constructor.
    *
    * @param \Drupal\parking\Services\ParkingService $calculator
    *   The calculator.
+   * 
+   * @param \Drupal\generate_vehicles\Services\GenerateService $generator
+   *   The generator.
    */
-  public function __construct(ParkingService $calculator) {
+  public function __construct(ParkingService $calculator, GenerateService $generator) {
     $this->calculator = $calculator;
+    $this->generator = $generator;
   }
 
   /**
@@ -37,7 +50,8 @@ class GenerateVehiclesForm extends FormBase {
     // Instantiates this form class.
     return new static(
       // Load the service required to construct this class.
-      $container->get('parking.calculation')
+      $container->get('parking.calculation'),
+      $container->get('vehicles.generation')
     );
   }
 
@@ -109,156 +123,53 @@ class GenerateVehiclesForm extends FormBase {
 
     // Nodes for current day.
     $currentDay = $numOfVehicles -$previousDay;
-
-    // Get random vehicle plates.
-    $randomVehiclePlate = $this->generateRandomVehiclePlates();
-
-    // Get random node title and 
-    // date/time the vehicle arrives in parking.
-    $randomDateIn = $this->generateRandomDate();
-
-    // Get random value for time type.
-    $typeValues = ['per_hour', 'per_day'];
-    $randomKey = random_int(0, 1);
-    $randomTimeType = $typeValues[$randomKey];
-
-    // The time vehicle departures.
-    $dateTimeOut = $randomDateIn + (3600*2);
-
-    // Get random value for departure time.
-    $departureValues = [NULL, $dateTimeOut];
-    $randTimeKey = random_int(0, 1);
-    $randomDateOut = $departureValues[$randTimeKey];
-
-    // Set a variable for random payment. 
-    $randomPayment= '';
-
-    // In case the vehicle leaves the parking.
-    if($randomDateOut != NULL){
-
-    // Get random payment value.
-    $randomPayment = random_int(0, 1);
-    }
-
-      // In case the vehicle is still in parking. 
-      else {
-
-        // The payment is 'No'.
-        $randomPayment == 0;
-      }
     
-      // Set a variable for the total cost.
-      $cost = "";
+    for($i = 1; $i <= $numOfVehicles; $i++){
+      $nodeCost = NULL;
+      if($i<=$currentDay) {
+        // nodes for the current day.
+        $nodeTimeType = 'per_hour';
+        $nodeDateIn = $this->generator->generateRandomDate();
+        $nodeDateOut = $this->generator->generateRandomDateOut($nodeDateIn);
 
-      // If the vehicle is checking out.
-      if($randomDateOut != NULL){
-      
-        // The time type is per hour
-        if($randomTimeType == 'per_hour'){
-
+        if($nodeDateOut != NULL){
+            // Get random payment value.
+           $nodePayment = random_int(0, 1);
           // Service for calculating the cost per hour.
-          $cost = $this->calculator->calculateCostPerHour($randomDateIn, $randomDateOut);
+          $nodeCost = $this->calculator->calculateCostPerHour($nodeDateIn, $nodeDateOut);
         }
-
-        // The time type per day.
         else{
-
-          // Service for calculating the cost per day..
-          $cost = $this->calculator->calculateCostPerDay($randomDateIn, $randomDateOut);
+           $nodePayment = 0;
+        }
       }
-    }
+      else{
+        // nodes for previous day.
+        $nodeTimeType = 'per_day';
+        $nodeDateIn = $this->generator->generateRandomDate(FALSE);
+        $nodeDateOut = NULL;
+        $nodePayment = 0;
+      }
 
-
+    $nodePlate = $this->generator->generateRandomVehiclePlates();
     // Generate the nodes after submission.
     $new_node = Node::create(['type' => 'parking']);
-    $new_node->set('title', $randomDateIn);
-    $new_node->set('field_car_plate', $randomVehiclePlate);
-    $new_node->set('field_datetime_in', $randomDateIn);
-    $new_node->set('field_datetime_out', $randomDateOut);
-    $new_node->set('field_time_type', $randomTimeType);
-    $new_node->set('field_payment', $randomPayment);
-    $new_node->set('field_cost', $cost);
+    $new_node->set('title', $nodeDateIn);
+    $new_node->set('field_car_plate', $nodePlate);
+    $new_node->set('field_datetime_in', $nodeDateIn);
+    $new_node->set('field_datetime_out', $nodeDateOut);
+    $new_node->set('field_time_type', $nodeTimeType);
+    $new_node->set('field_payment', $nodePayment);
+    $new_node->set('field_cost', $nodeCost);
     $new_node->enforceIsNew();
     $new_node->save();
 
+    }
     // A message shown after the submission.
-    \Drupal::messenger()->addMessage($this->t('The number of vehicles has been created.'));
+    \Drupal::messenger()->addMessage($this->t('@total number of vehicles has been created.', ['@total' => $numOfVehicles]));
 
     // Redirect to dashboard page.
     $form_state->setRedirect('parking_dashboard');
 
   }
-
-/**
- * Generate random vehicle plates.
- * 
- * @return string
- */
-protected function generateRandomVehiclePlates(){
-
-  // The letters for the vehicle plate.
-  $letters = 'ABEHIKMNOPTXYZ';
-
-  // The length of $letters string.
-  $lettersLength = strlen($letters);
-
-  // Set a value for the random letters.
-  $randomLetters = '';
-
-    // Loop through the letters.
-    // Choose random.
-    for ($i = 0; $i < 3; $i++) {
-        $randomLetters .= $letters[random_int(0, $lettersLength - 1)];
-    }
-
-  // The numbers for the vehicle plate.
-  $numbers = '0123456789';
-
-  // The length of $numbers string.
-  $numbersLength = strlen($numbers);
-
-  // Set a value for the random numbers.
-  $randomNumbers = '';
-
-    // Loop through the numbers.
-    // Choose random.
-    for ($j = 0; $j < 4; $j++) {
-        $randomNumbers .= $numbers[random_int(0, $numbersLength - 1)];
-    }
-
-    // The final random vehicle plate.
-    $vehiclePlate = $randomLetters . $randomNumbers;
-
-    // Return the vehicle plate.
-    return $vehiclePlate;
-
-}
-
-/**
- * Generate random date.
- * 
- * @return string
- */
-protected function generateRandomDate(){
-
-  // Current time.
-  $timestamp = time();
-
-  // Get the date from the timestamp.
-  $getDate = date('d-m-Y', $timestamp);
-
-  // Get today's date in 6:00.
-  $startDate = strtotime($getDate . '06:00');
-
-  // The today's date one hour earlier.
-  $endDate = $timestamp - 3600;
-
-  // Get a random timestamp.
-  $randomDate = rand($startDate, $endDate);
-
-  // Return the random timestamp.
-  return $randomDate;
-
-}
 
 }

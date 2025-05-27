@@ -1,0 +1,3 @@
+services:
+  vehicles.generation:
+    class: Drupal\generate_vehicles\Services\GenerateService
