@@ -112,60 +112,171 @@ class GenerateVehiclesForm extends FormBase {
     // Get the number of vehicles from the form field.
     $numOfVehicles = $form_state->getValue('vehicles_number');
 
-    // Split total nodes in two parts.
+    // Split total nodes into two parts.
     // Some nodes for current day (2/3).
-    // Some for previous days (1/3).
+    // Some nodes for previous days (1/3).
     // Nodes for previous day.
     $previousDay = $numOfVehicles / 3;
 
     // Nodes for current day.
     $currentDay = $numOfVehicles - $previousDay;
 
+    // Set a variable for the batch.
+    $operations = [];
+
+    // Loop through the number of vehicles.
+    // Split numbers in current and previous day.
     for ($i = 1; $i <= $numOfVehicles; $i++) {
+
+      // Set the vehicle cost as NULL.
       $nodeCost = NULL;
+
+      // Handle entities for current day.
       if ($i <= $currentDay) {
-        // Nodes for the current day.
+
+        // Set charge type per hour.
         $nodeTimeType = 'per_hour';
+
+        // Generate a timestamp randomly for arrival vehicle for current day.
         $nodeDateIn = $this->generator->generateRandomDate();
+
+        // Generate a timestamp randomly for departure vehicle.
+        // Could be a timestamp or NULL.
         $nodeDateOut = $this->generator->generateRandomDateOut($nodeDateIn);
 
+        // If the vehicle has left the parking.
         if ($nodeDateOut != NULL) {
+
           // Get random payment value.
           $nodePayment = random_int(0, 1);
-          // Service for calculating the cost per hour.
+
+          // Generate vehicle cost with booking per hour.
           $nodeCost = $this->calculator->calculateCostPerHour($nodeDateIn, $nodeDateOut);
         }
+
+        // If the vehicle is still in the parking.
         else {
+
+          // The payment checkbox field is 'No'.
           $nodePayment = 0;
         }
       }
+      // Handle entities for previous day.
       else {
-        // Nodes for previous day.
+
+        // Set charge type per day.
         $nodeTimeType = 'per_day';
+
+        // Generate a timestamp randomly for arrival vehicle for previous day.
         $nodeDateIn = $this->generator->generateRandomDate(FALSE);
+
+        // Set checkout date as NULL.
+        // The vehicles with per day booking won't have a checkout.
         $nodeDateOut = NULL;
+
+        // And the payment will be 'No'.
         $nodePayment = 0;
       }
 
+      // Generate a vehicle plate randomly.
       $nodePlate = $this->generator->generateRandomVehiclePlates();
+
+      // Create an array with the node fields.
+      $vehicleValues = [
+        'title' => $nodeDateIn,
+        'field_car_plate' => $nodePlate,
+        'field_datetime_in' => $nodeDateIn,
+        'field_datetime_out' => $nodeDateOut,
+        'field_time_type' => $nodeTimeType,
+        'field_payment' => $nodePayment,
+        'field_cost' => $nodeCost,
+
+      ];
+
       // Generate the nodes after submission.
-      $new_node = Node::create(['type' => 'parking']);
-      $new_node->set('title', $nodeDateIn);
-      $new_node->set('field_car_plate', $nodePlate);
-      $new_node->set('field_datetime_in', $nodeDateIn);
-      $new_node->set('field_datetime_out', $nodeDateOut);
-      $new_node->set('field_time_type', $nodeTimeType);
-      $new_node->set('field_payment', $nodePayment);
-      $new_node->set('field_cost', $nodeCost);
-      $new_node->enforceIsNew();
-      $new_node->save();
+      // Using the createBatchNode.
+      $operations[] = ['\Drupal\generate_vehicles\Form\GenerateVehiclesForm::createBatchNode', [$vehicleValues]];
 
     }
-    // A message shown after the submission.
-    \Drupal::messenger()->addMessage($this->t('@total number of vehicles has been created.', ['@total' => $numOfVehicles]));
+
+    // Create an array with the batch fields.
+    $batch = [
+      'title' => $this->t('Generate Vehicles'),
+      'init_message' => $this->t('Starting to process vehicles.'),
+      'progress_message' => $this->t('Completed @current out of @total nodes.'),
+      'finished' => '\Drupal\generate_vehicles\Form\GenerateVehiclesForm::finishedGeneration',
+      'error_message' => $this->t('Event processing has encountered an error.'),
+      'operations' => $operations,
+    ];
+
+    // Add the new batch set.
+    batch_set($batch);
 
     // Redirect to dashboard page.
     $form_state->setRedirect('parking_dashboard');
+
+  }
+
+  /**
+   * Message after the end of generation.
+   *
+   * @param bool $success
+   *   The process of generation.
+   * @param array $results
+   *   The vehicles been generated.
+   * @param array $operations
+   *   The operations.
+   */
+  public static function finishedGeneration($success, $results, $operations) {
+
+    // If the generation is processed with no error.
+    if ($success) {
+
+      // Print a message.
+      $message = \Drupal::translation()->formatPlural(
+      count($results),
+      'One vehicle processed.', '@count vehicles processed.'
+      );
+
+    }
+
+    // If there is an error in generation.
+    else {
+
+      // Print a message.
+      $message = t('Finished with an error.');
+    }
+
+    // Add message.
+    \Drupal::messenger()->addMessage($message);
+  }
+
+  /**
+   * Create the vehicle nodes.
+   *
+   * @param array $values
+   *   The node fields.
+   * @param array $context
+   *   The context.
+   */
+  public static function createBatchNode(array $values, &$context) {
+    sleep(3);
+    // Create node of type parking.
+    $new_node = Node::create(['type' => 'parking']);
+
+    // Loop through each field and value of node.
+    foreach ($values as $field => $value) {
+
+      // Set each field and value.
+      $new_node->set($field, $value);
+    }
+    // Save the vehicle node.
+    $new_node->enforceIsNew();
+    $new_node->save();
+
+    // Print a message with the title of the node after generation.
+    $context['message'] = 'Generate nodes with title: ' . $values['title'];
+    $context['results'][] = $values['title'];
 
   }
 
