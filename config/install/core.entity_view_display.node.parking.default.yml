@@ -1,0 +1,79 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.parking.field_car_plate
+    - field.field.node.parking.field_cost
+    - field.field.node.parking.field_datetime_in
+    - field.field.node.parking.field_datetime_out
+    - field.field.node.parking.field_payment
+    - field.field.node.parking.field_time_type
+    - node.type.parking
+  module:
+    - options
+    - user
+id: node.parking.default
+targetEntityType: node
+bundle: parking
+mode: default
+content:
+  field_car_plate:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {}
+    weight: 102
+    region: content
+  field_cost:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ""
+      prefix_suffix: true
+    third_party_settings: {}
+    weight: 103
+    region: content
+  field_datetime_in:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ""
+      timezone: ""
+    third_party_settings: {}
+    weight: 106
+    region: content
+  field_datetime_out:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ""
+      timezone: ""
+    third_party_settings: {}
+    weight: 107
+    region: content
+  field_payment:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ""
+      format_custom_true: ""
+    third_party_settings: {}
+    weight: 104
+    region: content
+  field_time_type:
+    type: list_default
+    label: above
+    settings: {}
+    third_party_settings: {}
+    weight: 108
+    region: content
+  links:
+    settings: {}
+    third_party_settings: {}
+    weight: 100
+    region: content
+hidden: {}

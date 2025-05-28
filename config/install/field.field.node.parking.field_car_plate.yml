@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_car_plate
+    - node.type.parking
+id: node.parking.field_car_plate
+field_name: field_car_plate
+entity_type: node
+bundle: parking
+label: "Vehicle Plate"
+description: ""
+required: false
+translatable: false
+default_value: {}
+default_value_callback: ""
+settings: {}
+field_type: string

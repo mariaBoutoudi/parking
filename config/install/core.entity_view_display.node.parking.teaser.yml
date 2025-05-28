@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.parking.field_car_plate
+    - field.field.node.parking.field_cost
+    - field.field.node.parking.field_datetime_in
+    - field.field.node.parking.field_datetime_out
+    - field.field.node.parking.field_payment
+    - field.field.node.parking.field_time_type
+    - node.type.parking
+  module:
+    - user
+id: node.parking.teaser
+targetEntityType: node
+bundle: parking
+mode: teaser
+content:
+  links:
+    settings: {}
+    third_party_settings: {}
+    weight: 100
+    region: content
+hidden:
+  field_car_plate: true
+  field_cost: true
+  field_datetime_in: true
+  field_datetime_out: true
+  field_payment: true
+  field_time_type: true

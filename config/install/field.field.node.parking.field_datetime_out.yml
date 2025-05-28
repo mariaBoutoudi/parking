@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_datetime_out
+    - node.type.parking
+id: node.parking.field_datetime_out
+field_name: field_datetime_out
+entity_type: node
+bundle: parking
+label: "Datetime out"
+description: ""
+required: false
+translatable: false
+default_value:
+  - value: 1737366347
+default_value_callback: ""
+settings: {}
+field_type: timestamp
