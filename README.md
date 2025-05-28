@@ -55,63 +55,51 @@ This module demonstrates a strong command of various Drupal development techniqu
 
 After enabling the module, you may need to:
 
-- Configure parking capacity: This module assumes a static capacity. You might need to implement a configuration form or a separate configuration entity if the capacity is dynamic.
-- Define parking rates: The cost calculation logic is currently implemented within the module's code. You may want to expose this as configurable settings (e.g., hourly rate, daily rate).
-- Review and adjust the permissions for accessing the check-in, check-out, dashboard, and listing pages.
+- Either change the parking capacity or the parking rates (hourly rate, daily rate, rate for the first hour). The current cost calculation can be easily modyfied by applying changes in the configuration form (`/admin/config/parking`).
 
 ## Usage
 
-- **Check-in a vehicle:** Navigate to `/parking/checkin` or use the button on the dashboard.
-- **Check-out a vehicle:** Navigate to `/parking/checkout` or use the button on the dashboard. Search for the vehicle using its check-in timestamp.
-- **View Dashboard:** Go to `/parking/dashboard`.
-- **View Occupied Spots & Debtors:** Go to `/parking/occupied-and-debtors`.
+- **Check-in a vehicle:** Navigate to `/arrivalform` or use the button on the dashboard.
+- **Check-out a vehicle:** Navigate to `/departureform` or use the button on the dashboard. Search for the vehicle using its check-in timestamp.
+- **View Dashboard:** Go to `/dashboard`.
+- **View Vehicle list & Debtors:** Go to `/admin/vehicle-list` or use the button on the dashboard.
 
 ## Module Structure
 
 - `parking.info.yml`: Module information file.
 - `parking.module`: Main module file for hooks and general functionality.
-- `src/Form/`: Contains custom form classes (CheckinForm, CheckoutSearchForm, CheckoutForm).
-- `src/Controller/`: Contains custom controller for the dashboard page.
+- `src/Form/`: Contains custom and configuration form classes (ArrivalForm, DepartuteFormSearch,DepartureFormCheckout, ParkingConfigForm).
+- `src/Controller/`: Contains custom controller for the dashboard page as well as the arrival and departure pages.
 - `src/Services/`: Contains custom service definitions.
-- `src/Plugin/Block/`: (Optional, if any custom blocks are used)
 - `config/install/`: Contains default configuration for content types, fields, views, etc. (e.g., `node.type.parking.yml`, `field.storage.node.field_vehicle_plate.yml`, `views.view.parking_occupied_debtors.yml`).
 - `templates/`: Custom Twig templates for theming.
 - `parking.routing.yml`: Defines module routes.
-- `parking.links.menu.yml`: Defines menu links.
 
-## Submodules
+## Submodule
 
 ### generate_vehicles
 
-This submodule extends the core parking functionality by providing tools for generating dummy vehicle nodes. This is particularly useful for testing purposes, populating the parking system with sample data, or simulating vehicle activity.
+This submodule extends the parking functionality by providing tools for generating dummy vehicle nodes. This is particularly useful for testing purposes, populating the parking system with sample data, or simulating vehicle activity.
 
 #### Features
 
-- **Vehicle Generation Form:** A dedicated form to generate a specified number of 'Parking' nodes with random vehicle plates and check-in timestamps.
+- **Vehicle Generation Form:** A dedicated form to generate a specified number of 'Parking' nodes with random titles, vehicle plates, check-in and check-out timestamps, booking time types (hourly or daily). Randomly selected payment (Yes or No) and calculated the cost for each vehicle entity.
 - **Drush Command (Optional):** May include a Drush command for command-line generation of vehicles for automated testing or batch operations.
 
 #### Installation
 
 1.  Ensure the main `parking` module is installed and enabled.
-2.  Place the `generate_vehicles` submodule in your Drupal installation's `modules/custom` directory, alongside the `parking` module.
+2.  Place the `generate_vehicles` submodule in your Drupal installation's `modules/custom/parking/modules` directory, inside the `parking` module.
 3.  Enable the submodule through the Drupal administration interface (`/admin/modules`).
 
 #### Usage
 
-- **Generate Vehicles via UI:** Navigate to `/admin/config/development/generate-vehicles` (or a similar path defined in the submodule's routing) and use the provided form.
+- **Generate Vehicles via UI:** Navigate to `/generateform` and use the provided form.
 - **Generate Vehicles via Drush (if applicable):** Execute the Drush command from your Drupal root directory (e.g., `drush generate:vehicles [count]`).
-
-## Extendability
-
-- **Custom Parking Rates:** The current cost calculation logic can be easily extended by modifying the relevant service or by introducing a dedicated configuration entity for rate management.
-- **Payment Integration:** Integrate with a payment gateway to handle actual payment processing, further demonstrating external API integration.
-- **Advanced Reporting:** Develop additional views or custom reports for more in-depth parking analytics, showcasing complex data manipulation and presentation.
-- **Notifications:** Implement email or SMS notifications for check-in/check-out events, highlighting integration with Drupal's mailing system or external services.
 
 ## Maintainer
 
-- [Your Name] - [Your Professional Email] - [Link to your professional profile/portfolio]
-
-## License
-
-[Specify your desired license, e.g., GPL-2.0-or-later]
+- Maria Boutoudi
+- mboutoudi@gmail.com
+- [LinkendIn](https://www.linkedin.com/in/maria-boutoudi-261209294/)
+- [Drupal Community](https://drupal.org/u/mariab)
