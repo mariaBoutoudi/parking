@@ -109,95 +109,95 @@ class GenerateVehiclesForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
-    // Get the number of vehicles from the form field.
-    $numOfVehicles = $form_state->getValue('vehicles_number');
+    // // Get the number of vehicles from the form field.
+    // $numOfVehicles = $form_state->getValue('vehicles_number');
 
-    // Split total nodes into two parts.
-    // Some nodes for current day (2/3).
-    // Some nodes for previous days (1/3).
-    // Nodes for previous day.
-    $previousDay = $numOfVehicles / 3;
+    // // Split total nodes into two parts.
+    // // Some nodes for current day (2/3).
+    // // Some nodes for previous days (1/3).
+    // // Nodes for previous day.
+    // $previousDay = $numOfVehicles / 3;
 
-    // Nodes for current day.
-    $currentDay = $numOfVehicles - $previousDay;
+    // // Nodes for current day.
+    // $currentDay = $numOfVehicles - $previousDay;
 
-    // Set a variable for the batch operations.
-    $operations = [];
+    // // Set a variable for the batch operations.
+    // $operations = [];
 
-    // Loop through the number of vehicles.
-    // Split numbers in current and previous day.
-    for ($i = 1; $i <= $numOfVehicles; $i++) {
+    // // Loop through the number of vehicles.
+    // // Split numbers in current and previous day.
+    // for ($i = 1; $i <= $numOfVehicles; $i++) {
 
-      // Set the vehicle cost as NULL.
-      $nodeCost = NULL;
+    //   // Set the vehicle cost as NULL.
+    //   $nodeCost = NULL;
 
-      // Handle entities for current day.
-      if ($i <= $currentDay) {
+    //   // Handle entities for current day.
+    //   if ($i <= $currentDay) {
 
-        // Set charge type per hour.
-        $nodeTimeType = 'per_hour';
+    //     // Set charge type per hour.
+    //     $nodeTimeType = 'per_hour';
 
-        // Generate a timestamp randomly for arrival vehicle for current day.
-        $nodeDateIn = $this->generator->generateRandomDate();
+    //     // Generate a timestamp randomly for arrival vehicle for current day.
+    //     $nodeDateIn = $this->generator->generateRandomDate();
 
-        // Generate a timestamp randomly for departure vehicle.
-        // Could be a timestamp or NULL.
-        $nodeDateOut = $this->generator->generateRandomDateOut($nodeDateIn);
+    //     // Generate a timestamp randomly for departure vehicle.
+    //     // Could be a timestamp or NULL.
+    //     $nodeDateOut = $this->generator->generateRandomDateOut($nodeDateIn);
 
-        // If the vehicle has left the parking.
-        if ($nodeDateOut != NULL) {
+    //     // If the vehicle has left the parking.
+    //     if ($nodeDateOut != NULL) {
 
-          // Get random payment value.
-          $nodePayment = random_int(0, 1);
+    //       // Get random payment value.
+    //       $nodePayment = random_int(0, 1);
 
-          // Generate vehicle cost with booking per hour.
-          $nodeCost = $this->calculator->calculateCostPerHour($nodeDateIn, $nodeDateOut);
-        }
+    //       // Generate vehicle cost with booking per hour.
+    //       $nodeCost = $this->calculator->calculateCostPerHour($nodeDateIn, $nodeDateOut);
+    //     }
 
-        // If the vehicle is still in the parking.
-        else {
+    //     // If the vehicle is still in the parking.
+    //     else {
 
-          // The payment checkbox field is 'No'.
-          $nodePayment = 0;
-        }
-      }
-      // Handle entities for previous day.
-      else {
+    //       // The payment checkbox field is 'No'.
+    //       $nodePayment = 0;
+    //     }
+    //   }
+    //   // Handle entities for previous day.
+    //   else {
 
-        // Set charge type per day.
-        $nodeTimeType = 'per_day';
+    //     // Set charge type per day.
+    //     $nodeTimeType = 'per_day';
 
-        // Generate a timestamp randomly for arrival vehicle for previous day.
-        $nodeDateIn = $this->generator->generateRandomDate(FALSE);
+    //     // Generate a timestamp randomly for arrival vehicle for previous day.
+    //     $nodeDateIn = $this->generator->generateRandomDate(FALSE);
 
-        // Set checkout date as NULL.
-        // The vehicles with per day booking won't have a checkout.
-        $nodeDateOut = NULL;
+    //     // Set checkout date as NULL.
+    //     // The vehicles with per day booking won't have a checkout.
+    //     $nodeDateOut = NULL;
 
-        // And the payment will be 'No'.
-        $nodePayment = 0;
-      }
+    //     // And the payment will be 'No'.
+    //     $nodePayment = 0;
+    //   }
 
-      // Generate a vehicle plate randomly.
-      $nodePlate = $this->generator->generateRandomVehiclePlates();
+    //   // Generate a vehicle plate randomly.
+    //   $nodePlate = $this->generator->generateRandomVehiclePlates();
 
-      // Create an array with the node fields.
-      $vehicleValues = [
-        'title' => $nodeDateIn,
-        'field_car_plate' => $nodePlate,
-        'field_datetime_in' => $nodeDateIn,
-        'field_datetime_out' => $nodeDateOut,
-        'field_time_type' => $nodeTimeType,
-        'field_payment' => $nodePayment,
-        'field_cost' => $nodeCost,
+    //   // Create an array with the node fields.
+    //   $vehicleValues = [
+    //     'title' => $nodeDateIn,
+    //     'field_car_plate' => $nodePlate,
+    //     'field_datetime_in' => $nodeDateIn,
+    //     'field_datetime_out' => $nodeDateOut,
+    //     'field_time_type' => $nodeTimeType,
+    //     'field_payment' => $nodePayment,
+    //     'field_cost' => $nodeCost,
 
-      ];
+    //   ];
 
       // Generate the nodes after submission.
       // Using the createBatchNode.
-      $operations[] = ['\Drupal\generate_vehicles\Form\GenerateVehiclesForm::createBatchNode', [$vehicleValues]];
+      $operations[] = ['\Drupal\generate_vehicles\Services\GenerateService::createBatchNode', [$vehicleValues]];
 
-    }
+    
 
     // Create and process the batch operations.
     $batch = [
@@ -251,33 +251,33 @@ class GenerateVehiclesForm extends FormBase {
     \Drupal::messenger()->addMessage($message);
   }
 
-  /**
-   * Create the vehicle nodes.
-   *
-   * @param array $values
-   *   The node fields.
-   * @param array $context
-   *   The context.
-   */
-  public static function createBatchNode(array $values, &$context) {
+  // /**
+  //  * Create the vehicle nodes.
+  //  *
+  //  * @param array $values
+  //  *   The node fields.
+  //  * @param array $context
+  //  *   The context.
+  //  */
+  // public static function createBatchNode(array $values, &$context) {
 
-    // Create node of type parking.
-    $new_node = Node::create(['type' => 'parking']);
+  //   // Create node of type parking.
+  //   $new_node = Node::create(['type' => 'parking']);
 
-    // Loop through each field and value of node.
-    foreach ($values as $field => $value) {
+  //   // Loop through each field and value of node.
+  //   foreach ($values as $field => $value) {
 
-      // Set each field and value.
-      $new_node->set($field, $value);
-    }
-    // Save the vehicle node.
-    $new_node->enforceIsNew();
-    $new_node->save();
+  //     // Set each field and value.
+  //     $new_node->set($field, $value);
+  //   }
+  //   // Save the vehicle node.
+  //   $new_node->enforceIsNew();
+  //   $new_node->save();
 
-    // Print a message with the title of the node after generation.
-    $context['message'] = 'Generate nodes with title: ' . $values['title'];
-    $context['results'][] = $values['title'];
+  //   // Print a message with the title of the node after generation.
+  //   $context['message'] = 'Generate nodes with title: ' . $values['title'];
+  //   $context['results'][] = $values['title'];
 
-  }
+  // }
 
 }

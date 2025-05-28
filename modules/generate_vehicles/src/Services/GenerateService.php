@@ -1,6 +1,7 @@
 <?php
 
 namespace Drupal\generate_vehicles\Services;
+use Drupal\node\Entity\Node;
 
 /**
  * The GenerateService class.
@@ -135,4 +136,39 @@ class GenerateService {
     return $randomDateOut;
   }
 
+  /**
+   * Create the vehicle nodes.
+   *
+   * @param array $values
+   *   The node fields.
+   * @param array $context
+   *   The context.
+   */  
+  public static function createBatchNode(array $values, &$context) {
+
+    // Create node of type parking.
+    $new_node = Node::create(['type' => 'parking']);
+
+    // Loop through each field and value of node.
+    foreach ($values as $field => $value) {
+
+      // Set each field and value.
+      $new_node->set($field, $value);
+    }
+    // Save the vehicle node.
+    $new_node->enforceIsNew();
+    $new_node->save();
+
+    // Print a message with the title of the node after generation.
+    $context['message'] = 'Generate nodes with title: ' . $values['title'];
+    $context['results'][] = $values['title'];
+
+  }
+
+
+  public function createNodes() {
+
+  }
+
+  
 }

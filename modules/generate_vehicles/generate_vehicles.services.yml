@@ -1,3 +1,7 @@
 services:
   vehicles.generation:
     class: Drupal\generate_vehicles\Services\GenerateService
+  generate_vehicles.commands:
+    class: \Drupal\generate_vehicles\Drush\Commands\GenerateCommands
+    tags:
+      - { name: drush.command }
