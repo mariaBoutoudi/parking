@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\Entity\Node;
 
 /**
- * The arrival class for the module.
+ * The arrival form class for the module.
  */
 class ArrivalForm extends FormBase {
 

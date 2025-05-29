@@ -73,7 +73,7 @@ class DashboardController extends ControllerBase {
    */
   public function content() {
 
-    // Get values from the config form to be used in twig template.
+    // Get values from the config form to be used in twig templates.
     $totalSpaces = $this->configFactory->get('parking.config.form')->get('total_spaces');
     $occupiedSpaces = $this->calculator->getSpecificParkingNodes();
     $chargePerHour = $this->configFactory->get('parking.config.form')->get('per_hour');

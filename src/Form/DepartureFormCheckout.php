@@ -10,7 +10,7 @@ use Drupal\parking\Services\ParkingService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * The departure checkout form.
+ * The departure checkout form class.
  */
 class DepartureFormCheckout extends FormBase {
 
@@ -101,7 +101,7 @@ class DepartureFormCheckout extends FormBase {
     // Load entity type manager service.
     $entityManager = $this->entityTypeManager;
 
-    // Load node by its title as an array.
+    // Load node by the title as an array.
     $properties = ['title' => $id];
     $nodeEntity = $entityManager->getStorage('node')->loadByProperties($properties);
 
@@ -128,7 +128,7 @@ class DepartureFormCheckout extends FormBase {
     if ($timeType == 'per_hour') {
 
       // Call the function which gives the total cost.
-      // Calculate the cost via ParkingService.
+      // Calculate the cost via calculator service.
       $cost = $this->calculator->calculateCostPerHour($in, $out);
     }
 
@@ -136,7 +136,7 @@ class DepartureFormCheckout extends FormBase {
     else {
 
       // Call the function which gives the total cost.
-      // Calculate the cost via ParkingService.
+      // Calculate the cost via calculator service.
       $cost = $this->calculator->calculateCostPerDay($in, $out);
     }
 

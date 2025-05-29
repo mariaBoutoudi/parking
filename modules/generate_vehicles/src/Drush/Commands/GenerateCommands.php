@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\generate_vehicles\Services\GenerateService;
 
 /**
- * A Drush commandfile.
+ * A Drush command class.
  */
 final class GenerateCommands extends DrushCommands {
 
@@ -27,7 +27,7 @@ final class GenerateCommands extends DrushCommands {
    */
   protected $generator;
 
-   /**
+  /**
    * The constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
@@ -37,7 +37,7 @@ final class GenerateCommands extends DrushCommands {
    */
   public function __construct(EntityTypeManager $entityTypeManager, GenerateService $generator) {
     $this->entityTypeManager = $entityTypeManager;
-     $this->generator = $generator;
+    $this->generator = $generator;
   }
 
   /**
@@ -55,48 +55,57 @@ final class GenerateCommands extends DrushCommands {
    */
   #[CLI\Command(name: 'generate_vehicles', aliases: ['gv'])]
   #[CLI\Usage(name: 'generate_vehicles (gv)', description: 'Usage description')]
+
+  /**
+   * The function with the drush command.
+   *
+   * @param null $args
+   *   The number of nodes to generate.
+   */
   public function commandName($args = NULL) {
 
     // If there isn't a number of nodes to generate in command.
     // (ex drush gv)
-    if($args == NULL) {
+    if ($args == NULL) {
 
       // Print an error.
       $this->io()->error('Please specify the number of vehicle nodes to generate (ex.drush gv 15).');
-      return;
     }
 
     // If there in a number in command.
-    else{
-          // The nodes created must be 1-50.
-          if($args > 50 || $args == 0){
+    else {
+      // The nodes created must be 1-50.
+      if ($args > 50 || $args == 0) {
 
-            // Print a warning.
-          $this->io()->warning("You can generate from 1 to 50 vehicle nodes. Please try again.");
+        // Print a warning.
+        $this->io()->warning("You can generate from 1 to 50 vehicle nodes. Please try again.");
+      }
+      // If the command is writen correctly.
+      else {
+
+        // Print messages.
+        $this->output()->writeln("Hello");
+        $this->output()->writeln('You are about to generate ' . $args . ' vehicle nodes');
+        $this->io()->confirm('Please confirm the generation');
+
+        // Generate an array with fields names and values.
+        $numNodes = $this->generator->generateNodesArray($args);
+
+        // Loop through the array with fields names and values.
+        foreach ($numNodes as $node) {
+
+          // Create the node vehicle.
+          $this->generator->createNode($node);
+          // Print a message after creation.
+          $this->output()->writeln("A node created successfully with title " . $node['title']);
         }
-          // If the command is writen correctly.
-          else{
 
-              // Generate the number .............................
-              $numNodes = $this->generator->generateNodesArray($args);
+        // Return a message.
+        return $this->io()->success('Successful creation of ' . $args . ' vehicle nodes');
 
-              // 
-              foreach($numNodes as $node){
-
-              // Create the node vehicle.
-              $this->generator->createNode($node);
-                 }
-              // Print messages.
-              $this->output()->writeln("Hello");
-              $this->output()->writeln('You are about to generate ' . $args . ' vehicle nodes');
-              $this->io()->confirm('Please confirm the generation');
-
-              // Return a message.
-              return $this->io()->success('Successful generation.');
-        }
+      }
     }
 
   }
-
 
 }

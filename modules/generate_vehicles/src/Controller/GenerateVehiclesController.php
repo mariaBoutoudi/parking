@@ -5,7 +5,7 @@ namespace Drupal\generate_vehicles\Controller;
 use Drupal\Core\Controller\ControllerBase;
 
 /**
- * The arrival controller.
+ * The generate vehicles controller.
  */
 class GenerateVehiclesController extends ControllerBase {
 

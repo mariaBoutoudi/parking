@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\parking\Services\ParkingService;
 
 /**
- * An departure controller.
+ * The departure controller.
  */
 class DepartureController extends ControllerBase {
 
@@ -52,7 +52,7 @@ class DepartureController extends ControllerBase {
   }
 
   /**
-   * Departure Controller.
+   * Returns a renderable array for a departure form.
    *
    * @param string|null $book_id
    *   The book id.
@@ -71,7 +71,7 @@ class DepartureController extends ControllerBase {
     // If we already have a vehicle id in the url.
     if ($book_id) {
 
-      // Load the node by its id from the url.
+      // Load the node by each id from the url.
       $entityManager = $this->entityTypeManager;
       $properties = ['title' => $book_id];
       $nodeEntity = $entityManager->getStorage('node')->loadByProperties($properties);
@@ -88,13 +88,13 @@ class DepartureController extends ControllerBase {
       // If the type of time is per hour.
       if ($timeType == 'per_hour') {
 
-        // Calculate the cost via ParkingService.
+        // Calculate the cost via calculator service.
         $cost = $this->calculator->calculateCostPerHour($node->get('field_datetime_in')->value, $currentTime);
       }
       // In case the time type is per day.
       else {
 
-        // Calculate the cost via ParkingService.
+        // Calculate the cost via calculator service.
         $cost = $this->calculator->calculateCostPerDay($node->get('field_datetime_in')->value, $currentTime);
       }
 

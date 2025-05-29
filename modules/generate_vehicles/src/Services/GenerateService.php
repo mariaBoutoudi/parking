@@ -10,7 +10,7 @@ use Drupal\Core\Entity\EntityTypeManager;
  * The GenerateService class.
  */
 class GenerateService {
-   /**
+  /**
    * The entitytypeManager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManager
@@ -51,7 +51,7 @@ class GenerateService {
     // The length of $letters string.
     $lettersLength = strlen($letters);
 
-    // Set a value for the random letters.
+    // Set a value for the 3 random letters.
     $randomLetters = '';
 
     // Loop through the letters.
@@ -66,7 +66,7 @@ class GenerateService {
     // The length of $numbers string.
     $numbersLength = strlen($numbers);
 
-    // Set a value for the random numbers.
+    // Set a value for the 4 random numbers.
     $randomNumbers = '';
 
     // Loop through the numbers.
@@ -84,7 +84,7 @@ class GenerateService {
   }
 
   /**
-   * Generate random date.
+   * Generate random date for current and previous day.
    *
    * @param bool $today
    *   The reference to the current day.
@@ -107,14 +107,13 @@ class GenerateService {
       $startDate = strtotime($getDate . '06:00');
 
       // The today's date one hour earlier.
-      // Set as departure time.
       $endDate = $timestamp - 3600;
 
     }
     // The reference to current day is FALSE.
     else {
 
-      // Set a variable to prenious day.
+      // Set a variable to previous day.
       $yesterday = $timestamp - (3600 * 24);
 
       // Get only the date from the timestamp.
@@ -172,7 +171,7 @@ class GenerateService {
    *   The node fields.
    * @param array $context
    *   The context.
-   */  
+   */
   public static function createBatchNode(array $values, &$context) {
 
     // Create node of type parking.
@@ -188,16 +187,15 @@ class GenerateService {
     $new_node->enforceIsNew();
     $new_node->save();
 
-    // Print a message with the title of the node after generation.
+    // Print a message with the title of the node after creation.
     $context['message'] = 'Generate nodes with title: ' . $values['title'];
     $context['results'][] = $values['title'];
 
   }
 
-    
   /**
    * Create the vehicle nodes.
-   * 
+   *
    * @param array $values
    *   The node fields.
    */
@@ -219,11 +217,11 @@ class GenerateService {
   }
 
   /**
-   * Generate n..................
-   * 
+   * Generate an array with fields names and values.
+   *
    * @param null $numOfVehicles
    *   The number of vehicle nodes.
-   * 
+   *
    * @return array
    *   The array of nodes.
    */
@@ -232,7 +230,6 @@ class GenerateService {
     // Split total number of nodes into two parts.
     // Some nodes for current day (2/3).
     // Some nodes for previous days (1/3).
-
     // Nodes for previous day.
     $previousDay = $numOfVehicles / 3;
 
@@ -289,7 +286,7 @@ class GenerateService {
         $nodeDateIn = $this->generateRandomDate(FALSE);
 
         // Set checkout date as NULL.
-        // The vehicles with per day booking won't have a checkout.
+        // The vehicles with per day booking won't have a checkout (default).
         $nodeDateOut = NULL;
 
         // And the payment will be 'No'.
@@ -317,10 +314,7 @@ class GenerateService {
 
     // Return the array.
     return $nodesArray;
-    
+
   }
 
-
-
-  
 }

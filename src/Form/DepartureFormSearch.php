@@ -77,13 +77,13 @@ class DepartureFormSearch extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
-    // Get the vehicle id from its form fields.
+    // Get the vehicle id from the form fields.
     $vehicleId = $form_state->getValue('vehicle_id');
 
     // Load entity type manager service.
     $entityManager = $this->entityTypeManager;
 
-    // Load node by its title.
+    // Load node by the title.
     $properties = ['title' => $vehicleId];
     $nodeEntity = $entityManager->getStorage('node')->loadByProperties($properties);
 

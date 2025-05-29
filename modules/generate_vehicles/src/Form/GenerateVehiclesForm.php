@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\generate_vehicles\Services\GenerateService;
 
 /**
- * The generate class for the module.
+ * The generate vehicle form class for the module.
  */
 class GenerateVehiclesForm extends FormBase {
 
@@ -96,6 +96,7 @@ class GenerateVehiclesForm extends FormBase {
     // In case the number of vehicles are more than 20.
     // Or equal to zero.
     if ($numOfVehicles > 20 || $numOfVehicles == 0) {
+
       // Error message.
       $form_state->setErrorByName('vehicles_number',
             $this->t('The number of vehicles must be from 1 to 20'));
@@ -111,17 +112,16 @@ class GenerateVehiclesForm extends FormBase {
     // Get the number of vehicles from the form field.
     $numOfVehicles = $form_state->getValue('vehicles_number');
 
-    // Get from generator the array of nodes.
+    // Get from generator service the array of nodes.
     $nodesArray = $this->generator->generateNodesArray($numOfVehicles);
 
     // Loop through each array.
-    foreach($nodesArray as $node){
+    foreach ($nodesArray as $node) {
 
       // Create after submission.
       // Using the batch operators.
       $operations[] = ['\Drupal\generate_vehicles\Services\GenerateService::createBatchNode', [$node]];
     }
-  
 
     // Create and process the batch operations.
     $batch = [
@@ -142,10 +142,10 @@ class GenerateVehiclesForm extends FormBase {
   }
 
   /**
-   * Message after the end of generation.
+   * Message after the end of batch creation.
    *
    * @param bool $success
-   *   The process of generation.
+   *   The process of creation.
    * @param array $results
    *   The vehicles been generated.
    * @param array $operations
@@ -153,7 +153,7 @@ class GenerateVehiclesForm extends FormBase {
    */
   public static function finishedGeneration($success, $results, $operations) {
 
-    // If the generation is processed with no error.
+    // If the creation is processed with no error.
     if ($success) {
 
       // Print a message.
@@ -164,7 +164,7 @@ class GenerateVehiclesForm extends FormBase {
 
     }
 
-    // If there is an error in generation.
+    // If there is an error in creation.
     else {
 
       // Print a message.

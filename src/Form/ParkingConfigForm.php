@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * The config class for the module.
+ * The config form class for the module.
  */
 class ParkingConfigForm extends ConfigFormBase {
 

@@ -38,7 +38,7 @@ class ParkingService {
   }
 
   /**
-   * Calculate the cost that vehicle must pay per hour.
+   * Calculate the cost the vehicle must pay per hour.
    *
    * @param string $checkIn
    *   The arrival time.
@@ -51,11 +51,11 @@ class ParkingService {
   public function calculateCostPerHour($checkIn, $checkOut) {
 
     // The cost for the first hour.
-    // from the config form.
+    // From the config form.
     $firstHour = $this->configFactory->get('parking.config.form')->get('first_hour');
 
     // The cost for each hour.
-    // from the config form.
+    // From the config form.
     $pricePerHour = $this->configFactory->get('parking.config.form')->get('per_hour');
 
     // Calculate the time the vehicle was in parking.
@@ -75,7 +75,7 @@ class ParkingService {
   }
 
   /**
-   * Calculate the cost that vehicle must pay per day.
+   * Calculate the cost the vehicle must pay per day.
    *
    * @param string $checkIn
    *   The arrival time.
@@ -88,7 +88,7 @@ class ParkingService {
   public function calculateCostPerDay($checkIn, $checkOut) {
 
     // The cost for the first day.
-    // Comes from the config form.
+    // From the config form.
     $pricePerDay = $this->configFactory->get('parking.config.form')->get('per_day');
 
     // Calculate the time the vehicle was in parking in seconds.
