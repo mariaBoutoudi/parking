@@ -46,7 +46,7 @@ final class GenerateCommands extends DrushCommands {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('vehicles.generation')
+      $container->get('generate_vehicles.generation')
     );
   }
 
@@ -56,9 +56,6 @@ final class GenerateCommands extends DrushCommands {
   #[CLI\Command(name: 'generate_vehicles', aliases: ['gv'])]
   #[CLI\Usage(name: 'generate_vehicles (gv)', description: 'Usage description')]
   public function commandName($args = NULL) {
-
-    $this->generator->createBatchNode(array $values, &$context);
-
 
     // If there isn't a number of nodes to generate in command.
     // (ex drush gv)
@@ -71,21 +68,32 @@ final class GenerateCommands extends DrushCommands {
 
     // If there in a number in command.
     else{
-
           // The nodes created must be 1-50.
           if($args > 50 || $args == 0){
 
             // Print a warning.
           $this->io()->warning("You can generate from 1 to 50 vehicle nodes. Please try again.");
         }
-
           // If the command is writen correctly.
           else{
-          $this->output()->writeln("Hello");
-          $this->output()->writeln('You are about to generate ' . $args . ' vehicle nodes');
-          $this->io()->confirm('Please confirm the generation');
-          return $this->io()->success('Successful generation.');
-          }
+
+              // Generate the number .............................
+              $numNodes = $this->generator->generateNodesArray($args);
+
+              // 
+              foreach($numNodes as $node){
+
+              // Create the node vehicle.
+              $this->generator->createNode($node);
+                 }
+              // Print messages.
+              $this->output()->writeln("Hello");
+              $this->output()->writeln('You are about to generate ' . $args . ' vehicle nodes');
+              $this->io()->confirm('Please confirm the generation');
+
+              // Return a message.
+              return $this->io()->success('Successful generation.');
+        }
     }
 
   }

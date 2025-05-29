@@ -1,12 +1,41 @@
 <?php
 
 namespace Drupal\generate_vehicles\Services;
+
 use Drupal\node\Entity\Node;
+use Drupal\parking\Services\ParkingService;
+use Drupal\Core\Entity\EntityTypeManager;
 
 /**
  * The GenerateService class.
  */
 class GenerateService {
+   /**
+   * The entitytypeManager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManager
+   */
+  protected $entityTypeManager;
+
+  /**
+   * The calculator.
+   *
+   * @var \Drupal\parking\Services\ParkingService
+   */
+  protected $calculator;
+
+  /**
+   * The constructor.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
+   *   The entitytypeManager.
+   * @param \Drupal\parking\Services\ParkingService $calculator
+   *   The calculator.
+   */
+  public function __construct(EntityTypeManager $entityTypeManager, ParkingService $calculator) {
+    $this->entityTypeManager = $entityTypeManager;
+    $this->calculator = $calculator;
+  }
 
   /**
    * Generate random vehicle plates.
@@ -137,7 +166,7 @@ class GenerateService {
   }
 
   /**
-   * Create the vehicle nodes.
+   * Create the vehicle nodes with batch.
    *
    * @param array $values
    *   The node fields.
@@ -165,10 +194,133 @@ class GenerateService {
 
   }
 
+    
+  /**
+   * Create the vehicle nodes.
+   * 
+   * @param array $values
+   *   The node fields.
+   */
+  public static function createNode(array $values) {
 
-  public function createNodes() {
+    // Create node of type parking.
+    $new_node = Node::create(['type' => 'parking']);
+
+    // Loop through each field and value of node.
+    foreach ($values as $field => $value) {
+
+      // Set each field and value.
+      $new_node->set($field, $value);
+    }
+    // Save the vehicle node.
+    $new_node->enforceIsNew();
+    $new_node->save();
 
   }
+
+  /**
+   * Generate n..................
+   * 
+   * @param null $numOfVehicles
+   *   The number of vehicle nodes.
+   * 
+   * @return array
+   *   The array of nodes.
+   */
+  public function generateNodesArray($numOfVehicles = NULL) {
+
+    // Split total number of nodes into two parts.
+    // Some nodes for current day (2/3).
+    // Some nodes for previous days (1/3).
+
+    // Nodes for previous day.
+    $previousDay = $numOfVehicles / 3;
+
+    // Nodes for current day.
+    $currentDay = $numOfVehicles - $previousDay;
+
+    // Create an empty array to store the nodes.
+    $nodesArray = [];
+
+    // Loop through the number of vehicle nodes.
+    // Split numbers in current and previous day.
+    for ($i = 1; $i <= $numOfVehicles; $i++) {
+
+      // Set the vehicle cost as NULL.
+      $nodeCost = NULL;
+
+      // Handle entities for current day.
+      if ($i <= $currentDay) {
+
+        // Set a variable for charge type per hour.
+        $nodeTimeType = 'per_hour';
+
+        // Generate a timestamp randomly for arrival vehicle for current day.
+        $nodeDateIn = $this->generateRandomDate();
+
+        // Generate a timestamp randomly for departure vehicle.
+        // Could be a timestamp or NULL.
+        $nodeDateOut = $this->generateRandomDateOut($nodeDateIn);
+
+        // If the vehicle has left the parking.
+        if ($nodeDateOut != NULL) {
+
+          // Get random payment value.
+          $nodePayment = random_int(0, 1);
+
+          // Calculate vehicle cost with booking per hour.
+          $nodeCost = $this->calculator->calculateCostPerHour($nodeDateIn, $nodeDateOut);
+        }
+
+        // If the vehicle is still in the parking.
+        else {
+
+          // The payment checkbox field is 'No'.
+          $nodePayment = 0;
+        }
+      }
+      // Handle entities for previous day.
+      else {
+
+        // Set a variable for charge type per day.
+        $nodeTimeType = 'per_day';
+
+        // Generate a timestamp randomly for arrival vehicle for previous day.
+        $nodeDateIn = $this->generateRandomDate(FALSE);
+
+        // Set checkout date as NULL.
+        // The vehicles with per day booking won't have a checkout.
+        $nodeDateOut = NULL;
+
+        // And the payment will be 'No'.
+        $nodePayment = 0;
+      }
+
+      // Generate a vehicle plate randomly.
+      $nodePlate = $this->generateRandomVehiclePlates();
+
+      // Create an array with the node fields.
+      $nodeValues = [
+        'title' => $nodeDateIn,
+        'field_car_plate' => $nodePlate,
+        'field_datetime_in' => $nodeDateIn,
+        'field_datetime_out' => $nodeDateOut,
+        'field_time_type' => $nodeTimeType,
+        'field_payment' => $nodePayment,
+        'field_cost' => $nodeCost,
+
+      ];
+
+      // Create an array with the vehicle nodes.
+      $nodesArray[] = $nodeValues;
+    }
+
+    // Return the array.
+    return $nodesArray;
+    
+  }
+
+
 
   
 }

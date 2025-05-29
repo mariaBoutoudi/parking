@@ -1,6 +1,7 @@
 services:
-  vehicles.generation:
+  generate_vehicles.generation:
     class: Drupal\generate_vehicles\Services\GenerateService
+    arguments: ["@entity_type.manager", "@parking.calculation"]
   generate_vehicles.commands:
     class: \Drupal\generate_vehicles\Drush\Commands\GenerateCommands
     tags:
