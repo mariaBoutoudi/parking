@@ -9,8 +9,8 @@ This Drupal 10/11 custom module serves as a comprehensive portfolio piece, showc
   - A new node of content type 'Parking' is created for each check-in.
   - The node title and 'datetime_in' field are automatically populated with the current timestamp.
 - **Vehicle Check-out:**
-  - Search form to locate a vehicle using its check-in timestamp (node title).
-  - Custom form to finalize check-out for a found vehicle.
+  - Search custom form to locate a vehicle using its check-in timestamp (node title).
+  - Check out custom form to finalize check-out for a found vehicle.
   - Displays information about the vehicle (plate and title).
   - Calculates and displays the total parking cost based on the duration as well as the type of booking of stay.
   - Provides a checkout option payment for departure vehicles. Also, there is a functionality for vehicles departuring the parking without payment.
@@ -37,11 +37,12 @@ This module demonstrates a strong command of various Drupal development techniqu
 - **Batch Operations:** Using batch operations to generate dummy nodes.
 - **Custom Routes:** Defined for all custom pages and forms, ensuring clean URLs and proper routing.
 - **Custom Twig Templates:** Utilized for theming custom forms and pages.
+- **Custom Drush commands:** Populated drush command to generate dummy entities.
 
 ## Installation
 
 1.  Download the module and place it in your Drupal installation's `modules/custom` directory.
-2.  Enable the module through the Drupal administration interface (`/admin/modules`).
+2.  Enable the module through the Drupal administration interface (`/admin/modules`) or using drush command (drush en parking).
 3.  Ensure the 'Parking' content type is created and configured with the following fields:
     - `field_car_plate` (Text)
     - `field_datetime_in` (Timestamp)
@@ -83,19 +84,25 @@ This submodule extends the parking functionality by providing tools for generati
 
 #### Features
 
-- **Vehicle Generation Form:** A dedicated form to generate a specified number of 'Parking' nodes with random titles, vehicle plates, check-in and check-out timestamps, booking time types (hourly or daily). Randomly selected payment (Yes or No) and calculated the cost for each vehicle entity.
-- **Drush Command (Optional):** May include a Drush command for command-line generation of vehicles for automated testing or batch operations.
+- **Vehicle Generation Form:** A dedicated form to generate a specified number of 'Parking' nodes with random titles, vehicle plates, check-in and check-out timestamps, booking time types (hourly or daily). Randomly selected payment (Yes or No) and calculated the cost based on current configuration for each vehicle entity.
+- **Drush Command:** Provides a drush command as alternative method to generate vehicle nodes.
 
 #### Installation
 
 1.  Ensure the main `parking` module is installed and enabled.
-2.  Place the `generate_vehicles` submodule in your Drupal installation's `modules/custom/parking/modules` directory, inside the `parking` module.
-3.  Enable the submodule through the Drupal administration interface (`/admin/modules`).
+2.  Enable the submodule through the Drupal administration interface (`/admin/modules`) or using drush command (drush en generate_vehicles).
 
 #### Usage
 
 - **Generate Vehicles via UI:** Navigate to `/generateform` and use the provided form.
-- **Generate Vehicles via Drush (if applicable):** Execute the Drush command from your Drupal root directory (e.g., `drush generate:vehicles [count]`).
+- **Generate Vehicles via Drush:** Execute the Drush command from your Drupal root directory (e.g., `drush gv 10`).
+
+#### Coming soon
+
+- Barcodes for each vehicle arrival.
+- Dashboard charts.
+- Clean up entities during uninstall.
+- Enriched code with extra functionality (permission, ajax, hooks).
 
 ## Maintainer
 
